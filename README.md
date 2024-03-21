@@ -1,2 +1,2 @@
 # MTGF
-What better way to refresh my knowledge of GF than implementing a grammar fo Magic The Gathering?
+What better way to refresh my knowledge of GF than implementing a grammar for Magic The Gathering?
