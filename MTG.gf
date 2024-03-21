@@ -13,8 +13,8 @@ abstract MTG = {
         Stats ;             -- power and toughness, e.g. 5/5 
      -- Details ;           -- fine print: artist, collector number...
 
-        MainType ;          -- e.g. "Creature"
-        SubType ;           -- e.g. "Dragon"
+        Class ;             -- main type, e.g. "Creature"
+        Subclass ;          -- subtype, e.g. "Dragon"
         Effect ;            -- e.g. "Flying" (but possibly also longer text)
         [Effect]{0} ;
         Flavor ;            -- flavor text (unconstrained language)
@@ -30,13 +30,24 @@ abstract MTG = {
     fun 
         card : Name -> ManaCost -> TypeLine -> Text -> Stats -> Card ;
 
-        typeLine : MainType -> SubType -> TypeLine ;
+        typeLine : Class -> Subclass -> TypeLine ;
+
         text : [Effect] -> Flavor -> Text ;
+
         stats : Power -> Toughness -> Stats ;
 
-        landMainType : MainType ;
-        creatureMainType : MainType ;
-        -- ...
+        -- permanent types
+        landClass : Class ;
+        creatureClass : Class ;
+        artifactClass : Class ;
+        enchantmentClass : Class ;
+     -- planeswalkerClass : Class ;
+     -- battleClass : Class ;
+
+        -- spell types
+        instantClass : Class ;
+        sorceryClass : Class ;
+
         effect : ActivationCost -> Keyword -> Explanation -> Effect ;
 
         activationCost : ManaCost -> Tap -> ActivationCost ;
