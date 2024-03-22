@@ -10,7 +10,7 @@ concrete MTGEng of MTG = open
 
         Name = NP ; -- not always NP but used that way in effect descriptions
         ManaCost = Str ; 
-        TypeLine = Str ;
+        TypeLine = {s : Str} ;
         TextBox = Str ;
         Stats = Str ;
 
@@ -32,13 +32,13 @@ concrete MTGEng of MTG = open
     
     lin
         -- doesn't work!
-      --basicLand subt = 
-      --    subt.s ! Sg ! Nom ++ "\n" ++ -- "Island"
-      --    typeLine basic land subt ;
+      basicLand subt = 
+        let tl : TypeLine = typeLine basic land subt
+        in subt.s ! Sg ! Nom ++ "\n" ++ tl.s ;
 
-        typeLine supt t subt = 
-            supt.s ! (AAdj Posit Nom) ++ t.s ! Sg ! Nom ++ -- "Basic Land"
-            "-" ++ subt.s ! Sg ! Nom ; -- "- Island"
+        typeLine supt t subt = {
+            s = supt.s ! (AAdj Posit Nom) ++ t.s ! Sg ! Nom ++ 
+                "-" ++ subt.s ! Sg ! Nom ; } ;
 
         -- supertypes
         basic = mkA "basic" ;
