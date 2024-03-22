@@ -38,12 +38,14 @@ abstract MTG = open Numeral in {
 
     fun 
         card : Name -> [Color] -> ManaCost -> TypeLine -> TextBox -> Stats -> Card ;
-        
+        basicLand : Subclass -> Card ; -- basic land with no flavor text
+
         manaCost : [Circle] -> ManaCost ;
         
-        typeLine : [Superclass] -> [Class] -> [Subclass] -> TypeLine ;
+        --typeLine : [Superclass] -> [Class] -> [Subclass] -> TypeLine ;
+        typeLine : Superclass -> Class -> Subclass -> TypeLine ; -- simplified
 
-        text : [Effect] -> Flavor -> TextBox ;
+        textBox : [Effect] -> Flavor -> TextBox ;
 
         stats : Power -> Toughness -> Stats ;
         
@@ -67,8 +69,14 @@ abstract MTG = open Numeral in {
         instant : Class ;
         sorcery : Class ;
 
-        effect : ActivationCost -> Keyword -> Explanation -> Effect ;
+        -- basic lands (more subypes to come) 
+        plain : Subclass ;
+        island : Subclass ;
+        swamp : Subclass ;
+        mountain : Subclass ;
+        forest : Subclass ;
 
+        effect : ActivationCost -> Keyword -> Explanation -> Effect ;
 
         -- colors
         white : Color ;
@@ -78,4 +86,26 @@ abstract MTG = open Numeral in {
         green : Color ;
 
         activationCost : ManaCost -> Tap -> ActivationCost ;
+
+        -- so-called "evergreen" keywords (more to come)
+        -- from en.wikipedia.org/wiki/List_of_Magic:_The_Gathering_keywords
+        deathtouch : Keyword ;
+        defender : Keyword ;
+        doubleStrike : Keyword ; 
+        enchant : Class -> Keyword ;
+        equip : ActivationCost -> Keyword ;
+        firstStrike : Keyword ;
+        flash : Keyword ;
+        flying : Keyword ;
+        haste : Keyword ;
+        hexproof : Keyword ;
+        indestructible : Keyword ;
+        lifelink : Keyword ;
+        menace : Keyword ;
+        protectionFrom : Color -> Keyword ; -- IDK if it's just colors
+        prowess : Keyword ;
+        reach : Keyword ;
+        trample : Keyword ;
+        vigilance : Keyword ;
+
 }
