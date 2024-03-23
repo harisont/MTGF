@@ -22,8 +22,8 @@ abstract MTG = open Numeral in {
         [Class]{1} ;
         Subclass ;          -- subtype, e.g. "Dragon"
         [Subclass]{0} ;
-        Effect ;            -- e.g. "Flying" (but possibly also longer text)
-        [Effect]{0} ;
+        Ability ;            -- e.g. "Flying" (but possibly also longer text)
+        [Ability]{0} ;
         Flavor ;            -- flavor text (unconstrained language)
         Power ;             -- usually a positive integer
         Toughness ;         -- usually a positive integer
@@ -32,9 +32,15 @@ abstract MTG = open Numeral in {
         [Color]{0} ;
         ActivationCost ;    -- cost for activating an effect
         Keyword ;           -- e.g. "Defender"
-        Explanation ;       -- explanation of an effect 
+        Explanation ;       -- ability text (reminder text or other)
 
         Tap ;               -- "self-tap" symbol (for activation costs)
+        -- parts of explanations 
+        Trigger ;           -- "When self-assembler enters the battlefield"
+        Possibility ;       -- "You may search your library for..."
+        Command ;           -- "Tap enchanted permanent"
+        Statement ;         -- "Enchanted permanent has indestructible"
+        Condition ;         -- "If you have an island"
 
     fun 
         card : Name -> [Color] -> ManaCost -> TypeLine -> TextBox -> Stats -> Card ;
@@ -45,7 +51,7 @@ abstract MTG = open Numeral in {
         --typeLine : [Superclass] -> [Class] -> [Subclass] -> TypeLine ;
         typeLine : Superclass -> Class -> Subclass -> TypeLine ; -- simplified
 
-        textBox : [Effect] -> Flavor -> TextBox ;
+        textBox : [Ability] -> Flavor -> TextBox ;
 
         stats : Power -> Toughness -> Stats ;
         
@@ -75,8 +81,14 @@ abstract MTG = open Numeral in {
         swamp : Subclass ;
         mountain : Subclass ;
         forest : Subclass ;
-
-        effect : ActivationCost -> Keyword -> Explanation -> Effect ;
+        
+        -- overload?
+        ability : Explanation -> Ability ;
+        keywordAbility : Keyword -> Ability ;
+        keywordAbilityWithReminder : Keyword -> Explanation -> Ability ;
+        abilityWithCost : ActivationCost -> Explanation -> Ability ;
+        keywordAbilityWithCost : ActivationCost -> Keyword -> Ability ; 
+        keywordAbilityWithReminderAndCost : ActivationCost -> Keyword -> Explanation -> Ability ; 
 
         -- colors
         white : Color ;
@@ -88,7 +100,6 @@ abstract MTG = open Numeral in {
         activationCost : ManaCost -> Tap -> ActivationCost ;
 
         -- so-called "evergreen" keywords (more to come)
-        -- from en.wikipedia.org/wiki/List_of_Magic:_The_Gathering_keywords
         deathtouch : Keyword ;
         defender : Keyword ;
         doubleStrike : Keyword ; 
@@ -100,11 +111,14 @@ abstract MTG = open Numeral in {
         haste : Keyword ;
         hexproof : Keyword ;
         indestructible : Keyword ;
+        intimidate : Keyword ;
+        landwalk : Subclass -> Keyword ;
         lifelink : Keyword ;
         menace : Keyword ;
         protectionFrom : Color -> Keyword ; -- IDK if it's just colors
         prowess : Keyword ;
         reach : Keyword ;
+        shroud : Keyword ;
         trample : Keyword ;
         vigilance : Keyword ;
 

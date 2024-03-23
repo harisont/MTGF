@@ -18,7 +18,7 @@ concrete MTGEng of MTG = open
         Superclass = A ;
         Class = N ;
         Subclass = N ;
-        Effect = Text ;
+        Ability = Text ;
         Flavor = Str ; -- should be Text, using Str as it is unconstrained
         Power = Decimal ;
         Toughness = Decimal ;
@@ -31,7 +31,6 @@ concrete MTGEng of MTG = open
         Tap = Bool ;
     
     lin
-        -- doesn't work!
       basicLand subt = 
         let tl : TypeLine = typeLine basic land subt
         in subt.s ! Sg ! Nom ++ "\n" ++ tl.s ;
@@ -87,7 +86,7 @@ concrete MTGEng of MTG = open
         reach = mkUtt (mkNP (mkN "reach")) ;
         trample = mkUtt (mkNP (mkN "trample")) ;
         vigilance = mkUtt (mkNP (mkN "vigilance")) ;
-    
+
     oper
         -- should be applicable to other languages too
         mkColor : Str -> Color = \s -> lin Color {a = mkA s ; n = mkN s} ;
