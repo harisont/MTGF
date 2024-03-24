@@ -1,6 +1,7 @@
 concrete MTGEng of MTG = open 
     Prelude, 
     ResEng,
+    StructuralEng,
     LangEng, 
     ConstructorsEng,
     ParadigmsEng,
@@ -8,41 +9,58 @@ concrete MTGEng of MTG = open
     lincat
         Card = Str ;
 
-        Name = NP ; -- not always NP but used that way in effect descriptions
+        Name = PN ;
         ManaCost = Str ; 
         TypeLine = {s : Str} ;
         TextBox = Str ;
         Stats = Str ;
+        Color = {a : A; n : N} ;
 
         Circle = Str ;
+
         Superclass = A ;
         Class = N ;
         Subclass = N ;
+
         Ability = Text ;
         Flavor = Str ; -- should be Text, using Str as it is unconstrained
+
         Power = Decimal ;
         Toughness = Decimal ;
 
-        Color = {a : A; n : N} ;
         ActivationCost = Str ;
-        Keyword = Utt ; -- often NP-like but not always
+        Keyword = PN ;
         Explanation = Text ;
 
         Tap = Bool ;
+
+        Statement = S ;
+        Command = Imp ;
+
+        Trigger = Cl ;
+        Action = VP ;
+        Condition = Cl ;
+
+        Target = NP ;
     
     lin
-      basicLand subt = 
-        let tl : TypeLine = typeLine basic land subt
-        in subt.s ! Sg ! Nom ++ "\n" ++ tl.s ;
+        basicLand subt = 
+            let tl : TypeLine = typeLine basic land subt
+            in subt.s ! Sg ! Nom ++ "\n" ++ tl.s ;
 
         typeLine supt t subt = {
             s = supt.s ! (AAdj Posit Nom) ++ t.s ! Sg ! Nom ++ 
                 "-" ++ subt.s ! Sg ! Nom ; } ;
 
-        -- supertypes
+        white = mkColor "white" ;
+        blue = mkColor "blue" ;
+        black = mkColor "black" ;
+        red = mkColor "red" ;
+        green = mkColor "green" ;
+
         basic = mkA "basic" ;
         legendary = mkA "legendary" ;
-        -- types
+
         land = mkN "land" ;
         creature = mkN "creature" ;
         artifact = mkN "artifact" ;
@@ -57,39 +75,44 @@ concrete MTGEng of MTG = open
         mountain = mkN "mountain" ;
         forest = mkN "forest" ;        
 
-        -- colors
-        white = mkColor "white" ;
-        blue = mkColor "blue" ;
-        black = mkColor "black" ;
-        red = mkColor "red" ;
-        green = mkColor "green" ;
-
         -- so-called "evergreen" keywords (more to come)
         -- from en.wikipedia.org/wiki/List_of_Magic:_The_Gathering_keywords
-        deathtouch = mkUtt (mkNP (mkN "deathtouch")) ;
-        defender = mkUtt (mkNP (mkN "defender")) ;
-        doubleStrike = mkUtt (mkNP (mkCN (mkAP (mkA "double")) strike)) ; 
-        enchant type = mkUtt (mkImp (mkV2 "enchant") (mkNP type));
-        --equip cost = mkUtt (mkImp (mkV2 "equip") (mkNP (mkN cost))) ;
-        firstStrike = mkUtt (mkNP (mkCN (mkAP (mkA "first")) strike)) ;
-        flash = mkUtt (mkNP (mkN "flash")) ;
-        flying = mkUtt (mkNP (mkN "flying")) ;
-        haste = mkUtt (mkNP (mkN "haste")) ;
-        hexproof = mkUtt (mkNP (mkN "hexproof")) ;
-        indestructible = mkUtt (mkAP (mkA "indestructible")) ;
-        lifelink = mkUtt (mkNP (mkN "lifelink")) ;
-        menace = mkUtt (mkImp (mkV "menace")) ;
-        protectionFrom color = mkUtt (mkNP (mkCN 
-                                        (mkN2 (mkN "protection") "from") 
-                                        (mkNP (color.n)))) ;
-        prowess = mkUtt (mkNP (mkN "prowess")) ;
-        reach = mkUtt (mkNP (mkN "reach")) ;
-        trample = mkUtt (mkNP (mkN "trample")) ;
-        vigilance = mkUtt (mkNP (mkN "vigilance")) ;
+        deathtouch = mkPN "deathtouch" ;
+        defender = mkPN "defender" ;
+        doubleStrike = mkPN "double strike" ; 
+     -- enchant type = mkPN ("enchant" ++ type.s ! Sg ! Nom);
+     -- equip cost = mkPN ("equip" ++ cost) ;
+        firstStrike = mkPN "first strike" ;
+        flash = mkPN "flash" ;
+        flying = mkPN "flying" ;
+        haste = mkPN "haste" ;
+        hexproof = mkPN "hexproof" ;
+        indestructible = mkPN "indestructible" ;
+        lifelink = mkPN "lifelink" ;
+        menace = mkPN "menace" ;
+     -- protectionFrom color = 
+     --     mkPN ("protection from" ++ color.n.s ! Sg ! Nom) ;
+        prowess = mkPN "prowess" ;
+        reach = mkPN "reach" ;
+        trample = mkPN "trample" ;
+        vigilance = mkPN "vigilance" ;
+        
+        targetCantAction trg act = mkS PNeg (mkCl trg can_VV act) ;
+        targetCanAction trg act = mkS PPos (mkCl trg can_VV act) ;
+ 
+        thisCreature = mkNP (mkQuant "this" "these") (creatureN) ;
+        creaturesWithKeyword a = mkNP 
+            (DetQuant IndefArt NumPl) 
+            (mkCN (mkN2 creatureN "with") (mkNP a));
+
+        attack = mkVP (mkV "attack") ;
+        block = mkVP blockV ;
+        blockTarget t = mkVP (mkV2 blockV) t ;
 
     oper
         -- should be applicable to other languages too
         mkColor : Str -> Color = \s -> lin Color {a = mkA s ; n = mkN s} ;
         
-        strike = mkN "strike" ;
+        creatureN = mkN "creature" ;
+        blockV = mkV "block" ;
 }
