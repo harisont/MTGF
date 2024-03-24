@@ -113,7 +113,9 @@ concrete MTGEng of MTG = open
 
         attack = mkVP (mkV "attack") ;
         block = mkVP blockV ;
-        blockTarget t = mkVP (mkV2 blockV) t ;
+        blockTarget t = mkVP blockV2 t ;
+        beBlocked = passiveVP blockV2 ;
+        beBlockedByTarget t = passiveVP blockV2 t ;
 
         positive = PPos ;
         negative = PNeg ;
@@ -124,4 +126,5 @@ concrete MTGEng of MTG = open
         
         creatureN = mkN "creature" ;
         blockV = mkV "block" ;
+        blockV2 = mkV2 blockV ;
 }

@@ -157,6 +157,8 @@ abstract MTG = open Numeral, Common in {
         attack : Action ;
         block : Action ;
         blockTarget : Target -> Action ;
+        beBlocked : Action ;
+        beBlockedByTarget : Target -> Action ;
 
         positive : Polarity ;
         negative : Polarity ;
