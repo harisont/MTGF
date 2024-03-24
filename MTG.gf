@@ -62,6 +62,8 @@ abstract MTG = open Numeral, Common in {
         -- tragets are used in triggers, actions and conditions
         Target ;            -- "target land", "this creature" or "Negate"
 
+        Polarity ;
+
     fun 
         card : Name -> [Color] -> ManaCost -> TypeLine -> TextBox -> Stats -> Card ;
         basicLand : Subclass -> Card ; -- basic land with no flavor text
@@ -145,11 +147,8 @@ abstract MTG = open Numeral, Common in {
         explanation : [Statement] -> [Command] -> Explanation ;
         oneStatementExplanation : Statement -> Explanation ;
         
-        -- I wanted to pass polarity but I could not make it work
-        -- "this creature can't attack"
-        targetCantAction : Target -> Action -> Statement ;
-        -- "this creature can block creatures with flying"
-        targetCanAction : Target -> Action -> Statement ;
+        -- "this creature can('t) block creatures with flying"
+        targetCanAction : Target -> Polarity -> Action -> Statement ;
 
         thisCreature : Target ;
         creaturesWithKeyword : Keyword -> Target ;
@@ -158,4 +157,7 @@ abstract MTG = open Numeral, Common in {
         attack : Action ;
         block : Action ;
         blockTarget : Target -> Action ;
+
+        positive : Polarity ;
+        negative : Polarity ;
 }

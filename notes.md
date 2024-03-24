@@ -22,6 +22,6 @@
 | Equip | Attach this permanent to target X creature you control. Activate this ability only any time you could cast a sorcery |  |
 
 ## Current problems
-- keywords with arguments, such as "protection from X"
-- reducing `targetCanAction` and `targetCantAction` to a single `targetCanAction` with `Pol` as a parameters
-- "plains" is technically a plural, can types be NPs in English then? 
+- [ ] keywords with arguments, such as "protection from X"
+- [x] reducing `targetCanAction` and `targetCantAction` to a single `targetCanAction` with `Pol` as a parameters
+- [ ] "plains" is technically a plural, can types be NPs in English then? 

@@ -42,6 +42,8 @@ concrete MTGEng of MTG = open
         Condition = Cl ;
 
         Target = NP ;
+
+        Polarity = Pol ;
     
     lin
         basicLand subt = 
@@ -101,8 +103,7 @@ concrete MTGEng of MTG = open
 
         oneStatementExplanation s = mkText (mkUtt s) ;
 
-        targetCantAction trg act = mkS PNeg (mkCl trg can_VV act) ;
-        targetCanAction trg act = mkS PPos (mkCl trg can_VV act) ;
+        targetCanAction trg pol act = mkS pol (mkCl trg can_VV act) ;
  
         thisCreature = mkNP (mkQuant "this" "these") (creatureN) ;
         creaturesWithKeyword a = mkNP 
@@ -113,6 +114,9 @@ concrete MTGEng of MTG = open
         attack = mkVP (mkV "attack") ;
         block = mkVP blockV ;
         blockTarget t = mkVP (mkV2 blockV) t ;
+
+        positive = PPos ;
+        negative = PNeg ;
 
     oper
         -- should be applicable to other languages too
