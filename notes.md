@@ -20,3 +20,8 @@
 | Deathtouch | Any amount of damage this deals to a creature is enough to destroy it |  |
 | Vigilance | Attacking doesn't cause this creature to tap |  |
 | Equip | Attach this permanent to target X creature you control. Activate this ability only any time you could cast a sorcery |  |
+
+## Current problems
+- keywords with arguments, such as "protection from X"
+- reducing `targetCanAction` and `targetCantAction` to a single `targetCanAction` with `Pol` as a parameters
+- "plains" is technically a plural, can types be NPs in English then? 
