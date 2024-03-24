@@ -26,3 +26,5 @@
 - [x] reducing `targetCanAction` and `targetCantAction` to a single `targetCanAction` with `Pol` as a parameters
 - [ ] "plains" is technically a plural, can types be NPs in English then? 
 - [ ] reducing `creaturesWithKeyword` and `creaturesWithKeyword1AndOrKeyword2` to `creaturesWithKeywords`, using lists (I don't know how to map `mkNP` on a list of `Keyword`s)
+- [ ] number agreement with "it" (e.g. "artifact __lands__ can't only be blocked by creatures that share a color with __it__*")
+- [ ] "you" in reflexives (e.g. "you can only be blocked by __you__")
