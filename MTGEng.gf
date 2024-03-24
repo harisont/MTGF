@@ -5,6 +5,7 @@ concrete MTGEng of MTG = open
     LangEng, 
     ConstructorsEng,
     ParadigmsEng,
+    ExtraEng,
     ParamX in {
     lincat
         Card = Str ;
@@ -19,7 +20,7 @@ concrete MTGEng of MTG = open
         Circle = Str ;
 
         Superclass = A ;
-        Class = N ;
+        Class = {a : A; n : N} ;
         Subclass = N ;
 
         Ability = Text ;
@@ -51,7 +52,7 @@ concrete MTGEng of MTG = open
             in subt.s ! Sg ! Nom ++ "\n" ++ tl.s ;
 
         typeLine supt t subt = {
-            s = supt.s ! (AAdj Posit Nom) ++ t.s ! Sg ! Nom ++ 
+            s = supt.s ! (AAdj Posit Nom) ++ t.n.s ! Sg ! Nom ++ 
                 "-" ++ subt.s ! Sg ! Nom ; } ;
 
         white = mkColor "white" ;
@@ -63,12 +64,12 @@ concrete MTGEng of MTG = open
         basic = mkA "basic" ;
         legendary = mkA "legendary" ;
 
-        land = mkN "land" ;
-        creature = mkN "creature" ;
-        artifact = mkN "artifact" ;
-        enchantment = mkN "enchantment" ;
-        instant = mkN "instant" ;
-        sorcery = mkN "sorcery" ;
+        land = mkClass "land" ;
+        creature = mkClass "creature" ;
+        artifact = mkClass "artifact" ;
+        enchantment = mkClass "enchantment" ;
+        instant = mkClass "instant" ;
+        sorcery = mkClass "sorcery" ;
 
         -- basic lands (more subypes to come) 
         plain = mkN "plain" ; -- should be "plainS" but that's dumb
@@ -105,17 +106,32 @@ concrete MTGEng of MTG = open
 
         targetCanAction trg pol act = mkS pol (mkCl trg can_VV act) ;
  
-        thisCreature = mkNP (mkQuant "this" "these") (creatureN) ;
-        creaturesWithKeyword a = mkNP 
+        thisClass c = mkNP this_Quant c.n ;
+        creaturesWithKeyword k = mkNP 
             (DetQuant IndefArt NumPl) 
-            (mkCN (mkN2 creatureN "with") (mkNP a));
+            (mkCN (mkN2 creature.n "with") (mkNP k));
+        creaturesWithKeyword1AndOrKeyword2 k1 k2 = mkNP 
+            (DetQuant IndefArt NumPl) 
+            (mkCN 
+                (mkN2 creature.n "with") 
+                (mkNP andOr_Conj (mkNP k1) (mkNP k2)));
         you = youSg_Pron ;
-
-        attack = mkVP (mkV "attack") ;
-        block = mkVP blockV ;
-        blockTarget t = mkVP blockV2 t ;
-        beBlocked = passiveVP blockV2 ;
-        beBlockedByTarget t = passiveVP blockV2 t ;
+        classClasses c1 c2 = mkNP (DetQuant IndefArt NumPl) (mkCN c1.a c2.n) ;
+        creaturesThatShareAColorWithIt = mkNP 
+            (DetQuant IndefArt NumPl) 
+            (mkCN creature.n (mkRS (mkRCl 
+                that_RP 
+                share_V3 
+                (mkNP (DetQuant IndefArt NumSg) color_N)
+                (mkNP it_Pron)))) ;
+        
+        attack = mkVP attack_V ;
+        block = mkVP block_V ;
+        blockTarget t = mkVP block_V2 t ;
+        beBlocked = passiveVP block_V2 ;
+        onlyBeBlockedByTarget t = mkVP only_Adv (passiveVP block_V2 t) ;
+        onlyBeBlockedByTarget1AndOrTarget2 t1 t2 = 
+            mkVP only_Adv (passiveVP block_V2 (mkNP andOr_Conj t1 t2)) ;
 
         positive = PPos ;
         negative = PNeg ;
@@ -123,8 +139,21 @@ concrete MTGEng of MTG = open
     oper
         -- should be applicable to other languages too
         mkColor : Str -> Color = \s -> lin Color {a = mkA s ; n = mkN s} ;
+        mkClass : Str -> Class = \s -> lin Class {a = mkA s ; n = mkN s} ;
         
-        creatureN = mkN "creature" ;
-        blockV = mkV "block" ;
-        blockV2 = mkV2 blockV ;
+        attack_V = mkV "attack" ;
+        attach_V = mkV "attach" ;
+        block_V = mkV "block" ;
+        share_V = mkV "share" ;
+
+        block_V2 = mkV2 block_V ;
+        share_V3 = mkV3 share_V with_Prep ;
+
+        color_N = mkN "color" ;
+
+        only_Adv = mkAdv "only" ;
+
+        this_Quant = mkQuant "this" "these" ;
+
+        andOr_Conj = mkConj "and/or" ;
 }

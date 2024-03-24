@@ -41,7 +41,8 @@ abstract MTG = open Numeral, Common in {
         -- abilities consist of an (optional) activation cost and a keyword 
         -- and/or explanation
         ActivationCost ;    -- cost for activating an effect
-        Keyword ;           -- e.g. "Defender"
+        Keyword ;           -- e.g. "Flying"
+        [Keyword]{1} ;
         Explanation ;       -- ability text (reminder text or other)
 
         -- activation costs may or may not include a "self-tap" symbol
@@ -150,15 +151,21 @@ abstract MTG = open Numeral, Common in {
         -- "this creature can('t) block creatures with flying"
         targetCanAction : Target -> Polarity -> Action -> Statement ;
 
-        thisCreature : Target ;
+        thisClass : Class -> Target ; -- "this creature"
+        -- could be "class with" but I think this is only used for creatures
         creaturesWithKeyword : Keyword -> Target ;
+        creaturesWithKeyword1AndOrKeyword2 : Keyword -> Keyword -> Target ;
+        creaturesWithKeywords : [Keyword] -> Target ;
+        creaturesThatShareAColorWithIt : Target ;
         you : Target ;
+        classClasses : Class -> Class -> Target ; -- "artifact creatures"
 
         attack : Action ;
         block : Action ;
         blockTarget : Target -> Action ;
         beBlocked : Action ;
-        beBlockedByTarget : Target -> Action ;
+        onlyBeBlockedByTarget : Target -> Action ;
+        onlyBeBlockedByTarget1AndOrTarget2 : Target -> Target -> Action ;
 
         positive : Polarity ;
         negative : Polarity ;

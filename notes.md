@@ -8,8 +8,8 @@
 | Haste | This creature can attack and TAPs as soon as it comes under your control |  |
 | Reach | This creature can block creatures with flying | X |
 | Defender | This creature can't attack | X |
-| Flying | This creature can't be blocked except by creatures with flying and/or reach |  |
-| Intimidate | This creature can't be blocked except by artifact creatures and/or creatures that share a color with it |  |
+| Flying | ~~This creature can't be blocked except by creatures with flying and/or reach~~ (reformulated as "This creature can only be blocked by creatures with flying and/or reach") | x |
+| Intimidate | ~~This creature can't be blocked except by artifact creatures and/or creatures that share a color with it~~ (reformulated as "this creature can only be blocked by artifact creatures and/or creatures that share a color with it") | x |
 | X-walk | This creature can't be blocked as long as defending player controls a X (land) |  |
 | Protection from X | This can't be blocked, targeted, dealt damage, enchanted, or equipped by anything X |  |
 | Hexproof | This permanent can't be the target of spells or abilities your opponents control |  |
@@ -25,3 +25,4 @@
 - [ ] keywords with arguments, such as "protection from X"
 - [x] reducing `targetCanAction` and `targetCantAction` to a single `targetCanAction` with `Pol` as a parameters
 - [ ] "plains" is technically a plural, can types be NPs in English then? 
+- [ ] reducing `creaturesWithKeyword` and `creaturesWithKeyword1AndOrKeyword2` to `creaturesWithKeywords`, using lists (I don't know how to map `mkNP` on a list of `Keyword`s)
