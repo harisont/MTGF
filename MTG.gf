@@ -143,6 +143,7 @@ abstract MTG = open Numeral, Common in {
         vigilance : Keyword ;
 
         explanation : [Statement] -> [Command] -> Explanation ;
+        oneStatementExplanation : Statement -> Explanation ;
         
         -- I wanted to pass polarity but I could not make it work
         -- "this creature can't attack"
@@ -152,6 +153,7 @@ abstract MTG = open Numeral, Common in {
 
         thisCreature : Target ;
         creaturesWithKeyword : Keyword -> Target ;
+        you : Target ;
 
         attack : Action ;
         block : Action ;

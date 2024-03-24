@@ -73,7 +73,9 @@ concrete MTGEng of MTG = open
         island = mkN "island" ;
         swamp = mkN "swamp" ;
         mountain = mkN "mountain" ;
-        forest = mkN "forest" ;        
+        forest = mkN "forest" ;     
+
+        ability e = e ;
 
         -- so-called "evergreen" keywords (more to come)
         -- from en.wikipedia.org/wiki/List_of_Magic:_The_Gathering_keywords
@@ -96,7 +98,9 @@ concrete MTGEng of MTG = open
         reach = mkPN "reach" ;
         trample = mkPN "trample" ;
         vigilance = mkPN "vigilance" ;
-        
+
+        oneStatementExplanation s = mkText (mkUtt s) ;
+
         targetCantAction trg act = mkS PNeg (mkCl trg can_VV act) ;
         targetCanAction trg act = mkS PPos (mkCl trg can_VV act) ;
  
@@ -104,6 +108,7 @@ concrete MTGEng of MTG = open
         creaturesWithKeyword a = mkNP 
             (DetQuant IndefArt NumPl) 
             (mkCN (mkN2 creatureN "with") (mkNP a));
+        you = youSg_Pron ;
 
         attack = mkVP (mkV "attack") ;
         block = mkVP blockV ;
