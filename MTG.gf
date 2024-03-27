@@ -72,102 +72,94 @@ abstract MTG = open Numeral, Common in {
         CreatureCard : Name -> [Color] -> ManaCost -> TypeLine -> Text -> Stats -> Card ;
 
         CardManaCost : [Circle] -> ManaCost ;
-        
         CardTypeLine : [Superclass] -> [Class] -> [Subclass] -> TypeLine ;
+        CardTextBox : [Ability] -> Flavor -> TextBox ;
+        CardStats : Power -> Toughness -> Stats ;
 
-        textBox : [Ability] -> Flavor -> TextBox ;
-
-        stats : Power -> Toughness -> Stats ;
+        WhiteColor : Color ;
+        BlueColor : Color ;
+        BlackColor : Color ;
+        RedColor : Color ;
+        GreenColor : Color ;
         
         -- cost could also be X but we'll se about that later
-        circle : Color -> Decimal -> Circle ;
-
-        -- colors
-        white : Color ;
-        blue : Color ;
-        black : Color ;
-        red : Color ;
-        green : Color ;
+        ManaCostCircle : Color -> Decimal -> Circle ;
 
         -- supertypes, from mtg.fandom.com/wiki/Supertype
-        basic : Superclass ;
-        legendary : Superclass ;
-     -- ongoing : Superclass ;
-     -- snow : Superclass ;
-     -- world : Superclass ;
+        BasicSuperclass : Superclass ;
+        LegendarySuperclass : Superclass ;
+     -- OngoingSuperclass : Superclass ;
+     -- SnowSuperclass : Superclass ;
+     -- WorldSuperclass : Superclass ;
 
         -- types, from mtg.fandom.com/wiki/Card_type
-        land : Class ;
-        creature : Class ;
-        artifact : Class ;
-        enchantment : Class ;
-     -- planeswalker : Class ;
-     -- battle : Class ;
-        instant : Class ;
-        sorcery : Class ;
+        LandClass : Class ;
+        CreatureClass : Class ;
+        ArtifactClass : Class ;
+        EnchantmentClass : Class ;
+        IstantClass : Class ;
+        SorceryClass : Class ;
+     -- PlaneswalkerClass : Class ;
+     -- BattleClass : Class ;
 
         -- basic lands (more subypes to come) 
-        plain : Subclass ;
-        island : Subclass ;
-        swamp : Subclass ;
-        mountain : Subclass ;
-        forest : Subclass ;
+        PlainSubclass : Subclass ;
+        IslandSubclass : Subclass ;
+        SwampSubclass : Subclass ;
+        MountainSubclass : Subclass ;
+        ForestSubclass : Subclass ;
         
-        -- overload?
-        ability : Explanation -> Ability ;
-        keywordAbility : Keyword -> Ability ;
-        keywordAbilityWithReminder : Keyword -> Explanation -> Ability ;
-        abilityWithCost : ActivationCost -> Explanation -> Ability ;
-        keywordAbilityWithCost : ActivationCost -> Keyword -> Ability ; 
-        keywordAbilityWithReminderAndCost : ActivationCost -> Keyword -> Explanation -> Ability ; 
+        BasicAbility : Explanation -> Ability ;
+        KeywordAbility : Keyword -> Ability ;
+        KeywordReminderAbility : Keyword -> Explanation -> Ability ;
+        ActivatedBasicAbility : ActivationCost -> Explanation -> Ability ;
+        ActivatedKeywordAbility : ActivationCost -> Keyword -> Ability ;
+        ActivatedKeywordReminderAbility : ActivationCost -> Keyword -> Explanation -> Ability ;
 
-        activationCost : ManaCost -> Tap -> ActivationCost ;
+        AbilityActivationCost : ManaCost -> Tap -> ActivationCost ;
 
         -- so-called "evergreen" keywords (more to come)
-        deathtouch : Keyword ;
-        defender : Keyword ;
-        doubleStrike : Keyword ; 
-        enchant : Class -> Keyword ;
-        equip : ActivationCost -> Keyword ;
-        firstStrike : Keyword ;
-        flash : Keyword ;
-        flying : Keyword ;
-        haste : Keyword ;
-        hexproof : Keyword ;
-        indestructible : Keyword ;
-        intimidate : Keyword ;
-        landwalk : Subclass -> Keyword ;
-        lifelink : Keyword ;
-        menace : Keyword ;
-        protectionFrom : Color -> Keyword ; -- IDK if it's just colors
-        prowess : Keyword ;
-        reach : Keyword ;
-        shroud : Keyword ;
-        trample : Keyword ;
-        vigilance : Keyword ;
+        DeathtouchKeyword : Keyword ;
+        DefenderKeyword : Keyword ;
+        DoubleStrikeKeyword : Keyword ; 
+        EnchantKeyword : Class -> Keyword ;
+        EquipKeyword : ActivationCost -> Keyword ;
+        FirstStrikeKeyword : Keyword ;
+        FlashKeyword : Keyword ;
+        FlyingKeyword : Keyword ;
+        HasteKeyword : Keyword ;
+        HexproofKeyword : Keyword ;
+        IndestructibleKeyword : Keyword ;
+        IntimidateKeyword : Keyword ;
+        LandwalkKeyword : Subclass -> Keyword ;
+        LifelinkKeyword : Keyword ;
+        MenaceKeyword : Keyword ;
+        ProtectionFromKeyword : Color -> Keyword ; -- IDK if it's just colors
+        ProwessKeyword : Keyword ;
+        ReachKeyword : Keyword ;
+        ShroudKeyword : Keyword ;
+        TrampleKeyword : Keyword ;
+        VigilanceKeyword : Keyword ;
 
-        explanation : [Statement] -> [Command] -> Explanation ;
-        oneStatementExplanation : Statement -> Explanation ;
+        AbilityExplanation : [Statement] -> [Command] -> Explanation ;
         
         -- "this creature can('t) block creatures with flying"
-        targetCanAction : Target -> Polarity -> Action -> Statement ;
+        TargetCanActionStatement : Target -> Polarity -> Action -> Statement ;
 
-        thisClass : Class -> Target ; -- "this creature"
+        ThisClassTarget : Class -> Target ; -- "this creature"
         -- could be "class with" but I think this is only used for creatures
-        creaturesWithKeyword : Keyword -> Target ;
-        creaturesWithKeyword1AndOrKeyword2 : Keyword -> Keyword -> Target ;
-        creaturesWithKeywords : [Keyword] -> Target ;
-        creaturesThatShareAColorWithIt : Target ;
-        you : Target ;
-        classClasses : Class -> Class -> Target ; -- "artifact creatures"
+        CreaturesWithKeywordsTarget : [Keyword] -> Target ;
+        CreaturesThatShareAColorWithIt : Target ;
+        YouTarget : Target ;
+        ClassClassesTarget : Class -> Class -> Target ; -- "artifact creatures"
 
-        attack : Action ;
-        block : Action ;
-        blockTarget : Target -> Action ;
-        beBlocked : Action ;
-        onlyBeBlockedByTarget : Target -> Action ;
-        onlyBeBlockedByTarget1AndOrTarget2 : Target -> Target -> Action ;
+        AttackAction : Action ;
+        BlockAction : Action ;
+        BlockTargetAction : Target -> Action ;
+        BeBlockedAction : Action ;
+        OnlyBeBlockedByTargetAction : Target -> Action ;
+        OnlyBeBlockedByTarget1AndOrTarget2Action : Target -> Target -> Action ;
 
-        positive : Polarity ;
-        negative : Polarity ;
+        PositivePolarity : Polarity ;
+        NegativePolarity : Polarity ;
 }
