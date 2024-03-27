@@ -6,7 +6,8 @@ concrete MTGEng of MTG = open
     ConstructorsEng,
     ParadigmsEng,
     ExtraEng,
-    ParamX in {
+    ParamX,
+    CatEng in {
     lincat
         Card = Str ;
 
@@ -19,9 +20,12 @@ concrete MTGEng of MTG = open
 
         Circle = Str ;
 
-        Superclass = A ;
-        Class = {a : A; n : N} ;
-        Subclass = N ;
+        Superclass = AP ;
+        ListSuperclass = ListAP ;
+        Class = {a : AP; n : CN} ;
+        ListClass = {as : ListAP; ns : ListCN } ;
+        Subclass = CN ;
+        ListSubclass = ListCN ; 
 
         Ability = Text ;
         Flavor = Str ; -- should be Text, using Str as it is unconstrained
@@ -47,13 +51,17 @@ concrete MTGEng of MTG = open
         Polarity = Pol ;
     
     lin
-        basicLand subt = 
-            let tl : TypeLine = typeLine basic land subt
+        Land subt = 
+            let tl : TypeLine = CardTypeLine basic land subt
             in subt.s ! Sg ! Nom ++ "\n" ++ tl.s ;
 
-        typeLine supt t subt = {
-            s = supt.s ! (AAdj Posit Nom) ++ t.n.s ! Sg ! Nom ++ 
-                "-" ++ subt.s ! Sg ! Nom ; } ;
+        CardTypeLine supts ts subts = {
+            s = supts.s1 ! (AgP1 Sg) ++ supts.s2 ! (AgP1 Sg) ++
+                ts.ns.s1 ! Sg ! Nom ++ ts.ns.s2 ! Sg ! Nom ++
+                subts.s1 ! Sg ! Nom ++ subts.s2 ! Sg ! Nom  
+        } ;
+            --s = supt.s ! (AAdj Posit Nom) ++ t.n.s ! Sg ! Nom ++ 
+            --    "-" ++ subt.s ! Sg ! Nom ; } ;
 
         white = mkColor "white" ;
         blue = mkColor "blue" ;
@@ -61,9 +69,19 @@ concrete MTGEng of MTG = open
         red = mkColor "red" ;
         green = mkColor "green" ;
 
-        basic = mkA "basic" ;
-        legendary = mkA "legendary" ;
+        BaseSuperclass = lin ListAP {s1 = \\_ => ""; s2 = \\_ => ""; isPre = False} ;
+        ConsSuperclass = mkListAP ;
+        basic = mkAP (mkA "basic") ;
+        legendary = mkAP (mkA "legendary") ;
 
+        BaseClass c = lin ListClass {
+            as = lin ListAP {s1 = c.a.s ; s2 = \\_ => ""; isPre = False} ;
+            ns = lin ListCN {s1 = c.n.s ; s2 = \\_,_ => ""} ;
+        } ;
+        ConsClass c cs = {
+            as = mkListAP c.a cs.as ;
+            ns = mkListCN c.n cs.ns ;
+        } ; 
         land = mkClass "land" ;
         creature = mkClass "creature" ;
         artifact = mkClass "artifact" ;
@@ -71,12 +89,14 @@ concrete MTGEng of MTG = open
         instant = mkClass "instant" ;
         sorcery = mkClass "sorcery" ;
 
+        BaseSubclass = lin ListCN {s1 = \\_,_ => ""; s2 = \\_,_ => ""} ;
+        ConsSubclass = mkListCN ;
         -- basic lands (more subypes to come) 
-        plain = mkN "plain" ; -- should be "plainS" but that's dumb
-        island = mkN "island" ;
-        swamp = mkN "swamp" ;
-        mountain = mkN "mountain" ;
-        forest = mkN "forest" ;     
+        plain = mkCN (mkN "plain") ; -- should be "plainS" but that's dumb
+        island = mkCN (mkN "island") ;
+        swamp = mkCN (mkN "swamp") ;
+        mountain = mkCN (mkN "mountain") ;
+        forest = mkCN (mkN "forest") ;     
 
         ability e = e ;
 
@@ -137,9 +157,14 @@ concrete MTGEng of MTG = open
         negative = PNeg ;
 
     oper
+
+        mkListCN : CN -> [CN] -> [CN] = \n,ns -> lin ListCN {
+            s1 = n.s ;
+            s2 = \\num,cas => ns.s1 ! num ! cas ++ ns.s2 ! num ! cas ; 
+        };
         -- should be applicable to other languages too
         mkColor : Str -> Color = \s -> lin Color {a = mkA s ; n = mkN s} ;
-        mkClass : Str -> Class = \s -> lin Class {a = mkA s ; n = mkN s} ;
+        mkClass : Str -> Class = \s -> lin Class {a = (mkAP (mkA s)) ; n = (mkCN (mkN s))} ;
         
         attack_V = mkV "attack" ;
         attach_V = mkV "attach" ;
@@ -151,7 +176,7 @@ concrete MTGEng of MTG = open
 
         color_N = mkN "color" ;
 
-        only_Adv = mkAdv "only" ;
+        only_Adv = mkAdV "only" ;
 
         this_Quant = mkQuant "this" "these" ;
 
