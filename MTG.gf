@@ -23,11 +23,8 @@ abstract MTG = open Numeral, Common in {
         -- type lines are composed of an optional supertype, one or more 
         -- main type and, optionally one or two subtypes
         Superclass ;        -- supertype, e.g. "Basic" or "Legendary"
-        [Superclass]{0} ;
         Class ;             -- main type, e.g. "Creature"
-        [Class]{1} ;
         Subclass ;          -- subtype, e.g. "Dragon"
-        [Subclass]{0} ;
         
         -- text boxs may contain a list of abilities and a flavor text
         Ability ;           -- e.g. "Flying" (but possibly also longer text)
@@ -68,12 +65,34 @@ abstract MTG = open Numeral, Common in {
     fun 
         BasicLandCard : Subclass -> Flavor -> Card ;
         LandCard : Subclass -> TypeLine -> TextBox -> Card ; 
-        SpellCard : Name -> [Color] -> ManaCost -> TypeLine -> TextBox -> Card ;
-        CreatureCard : Name -> [Color] -> ManaCost -> TypeLine -> Text -> Stats -> Card ;
+        SpellCard : 
+            Name -> [Color] -> ManaCost -> TypeLine -> TextBox -> Card ;
+        CreatureCard : 
+            Name -> [Color] -> ManaCost -> TypeLine -> Text -> Stats -> Card ;
 
         CardManaCost : [Circle] -> ManaCost ;
-        CardTypeLine : [Superclass] -> [Class] -> [Subclass] -> TypeLine ;
+        
+        -- Instant
+        ClassTypeLine : Class -> TypeLine ;              
+        -- Basic Land           
+        SuperTypeLine : Superclass -> Class -> TypeLine ;
+        -- Creature - Human
+        ClassSubTypeLine : Class -> Subclass -> TypeLine ;
+        -- Legendary Creature - Human
+        SuperClassSubTypeLine : Superclass -> Class -> Subclass -> TypeLine ;
+        -- Creature - Human Warrior 
+        ClassSubsTypeLine : Class -> Subclass -> Subclass -> TypeLine ;
+        -- Artifact Creature - Scarecrow
+        ClassesSubsTypeLine : Class -> Class -> Subclass -> TypeLine ;
+        -- Legendary Creature - Human Warrior
+        SupersClassSubsTypeLine : 
+            Superclass -> Class -> Subclass -> Subclass -> TypeLine ;
+        -- Legendary Artifact Creature - Human Warrior  
+        SupersClassesSubsTypeLine : 
+            Superclass -> Class -> Class -> Subclass -> Subclass -> TypeLine ;
+
         CardTextBox : [Ability] -> Flavor -> TextBox ;
+        
         CardStats : Power -> Toughness -> Stats ;
 
         WhiteColor : Color ;
@@ -101,6 +120,7 @@ abstract MTG = open Numeral, Common in {
         SorceryClass : Class ;
      -- PlaneswalkerClass : Class ;
      -- BattleClass : Class ;
+     -- ClassClass : Class -> Class -> Class ; -- Artifact Creature
 
         -- basic lands (more subypes to come) 
         PlainSubclass : Subclass ;
@@ -114,7 +134,8 @@ abstract MTG = open Numeral, Common in {
         KeywordReminderAbility : Keyword -> Explanation -> Ability ;
         ActivatedBasicAbility : ActivationCost -> Explanation -> Ability ;
         ActivatedKeywordAbility : ActivationCost -> Keyword -> Ability ;
-        ActivatedKeywordReminderAbility : ActivationCost -> Keyword -> Explanation -> Ability ;
+        ActivatedKeywordReminderAbility : 
+            ActivationCost -> Keyword -> Explanation -> Ability ;
 
         AbilityActivationCost : ManaCost -> Tap -> ActivationCost ;
 
@@ -152,14 +173,16 @@ abstract MTG = open Numeral, Common in {
         CreaturesWithKeywordsTarget : [Keyword] -> Target ;
         CreaturesThatShareAColorWithIt : Target ;
         YouTarget : Target ;
-        ClassClassesTarget : Class -> Class -> Target ; -- "artifact creatures"
+        -- "artifact creatures"
+        ClassClassesTarget : Class -> Class -> Target ;
 
         AttackAction : Action ;
         BlockAction : Action ;
         BlockTargetAction : Target -> Action ;
         BeBlockedAction : Action ;
         OnlyBeBlockedByTargetAction : Target -> Action ;
-        OnlyBeBlockedByTarget1AndOrTarget2Action : Target -> Target -> Action ;
+        OnlyBeBlockedByTarget1AndOrTarget2Action : 
+            Target -> Target -> Action ;
 
         PositivePolarity : Polarity ;
         NegativePolarity : Polarity ;

@@ -13,19 +13,16 @@ concrete MTGEng of MTG = open
 
         Name = PN ;
         ManaCost = Str ; 
-        TypeLine = {s : Str} ;
+        TypeLine = Str ;
         TextBox = Str ;
         Stats = Str ;
-        Color = {a : A; n : N} ;
+        Color = {a : A; n : CN} ;
 
         Circle = Str ;
 
-        Superclass = AP ;
-        ListSuperclass = ListAP ;
-        Class = {a : AP; n : CN} ;
-        ListClass = {as : ListAP; ns : ListCN } ;
+        Superclass = A ;
+        Class = {a : A; n : CN} ;
         Subclass = CN ;
-        ListSubclass = ListCN ; 
 
         Ability = Text ;
         Flavor = Str ; -- should be Text, using Str as it is unconstrained
@@ -52,48 +49,50 @@ concrete MTGEng of MTG = open
         Polarity = Pol ;
     
     lin
-
-        CardTypeLine supts ts subts = {
-            s = supts.s1 ! (AgP1 Sg) ++ supts.s2 ! (AgP1 Sg) ++
-                ts.ns.s1 ! Sg ! Nom ++ ts.ns.s2 ! Sg ! Nom ++
-                subts.s1 ! Sg ! Nom ++ subts.s2 ! Sg ! Nom  
-        } ;
-            --s = supt.s ! (AAdj Posit Nom) ++ t.n.s ! Sg ! Nom ++ 
-            --    "-" ++ subt.s ! Sg ! Nom ; } ;
-
+        ClassTypeLine c = c.n.s ! Sg ! Nom ;
+        SuperTypeLine supc c = supc.s ! (AAdj Posit Nom) ++ c.n.s ! Sg ! Nom ;
+        ClassSubTypeLine c subc = 
+            c.n.s ! Sg ! Nom ++ "-" ++ subc.s ! Sg ! Nom ;
+        SuperClassSubTypeLine supc c subc = supc.s ! (AAdj Posit Nom) 
+                                         ++ c.n.s ! Sg ! Nom ++ "-"  
+                                         ++ subc.s ! Sg ! Nom ;
+        ClassSubsTypeLine c subc1 subc2 = c.n.s ! Sg ! Nom ++ "-" 
+                                       ++ subc1.s ! Sg ! Nom 
+                                       ++ subc2.s ! Sg ! Nom ; 
+        ClassesSubsTypeLine c1 c2 subc = c1.n.s ! Sg ! Nom
+                                      ++ c2.n.s ! Sg ! Nom ++ "-" 
+                                      ++ subc.s ! Sg ! Nom ;
+        SupersClassSubsTypeLine supc c subc1 subc2 = supc.s ! (AAdj Posit Nom)
+                                                  ++ c.n.s ! Sg ! Nom
+                                                  ++ "-" ++ subc1.s ! Sg ! Nom
+                                                  ++ subc2.s ! Sg ! Nom ;
+        SupersClassesSubsTypeLine supc c1 c2 subc1 subc2 =                     
+            supc.s ! (AAdj Posit Nom)
+         ++ c1.n.s ! Sg ! Nom        
+         ++ c2.n.s ! Sg ! Nom        
+         ++ "-" ++ subc1.s ! Sg ! Nom   
+         ++ subc2.s ! Sg ! Nom ;     
+             
         WhiteColor = mkColor "white" ;
         BlueColor = mkColor "blue" ;
         BlackColor = mkColor "black" ;
         RedColor = mkColor "red" ;
         GreenColor = mkColor "green" ;
 
-        BaseSuperclass = lin ListAP {
-            s1 = \\_ => ""; 
-            s2 = \\_ => ""; 
-            isPre = False} ;
-        ConsSuperclass = mkListAP ;
-        BasicSuperclass = mkAP (mkA "basic") ;
-        LegendarySuperclass = mkAP (mkA "legendary") ;
+        BasicSuperclass = mkA "basic" ;
+        LegendarySuperclass = mkA "legendary" ;
 
-        BaseClass c = lin ListClass {
-            as = lin ListAP {s1 = c.a.s ; s2 = \\_ => ""; isPre = False} ;
-            ns = lin ListCN {s1 = c.n.s ; s2 = \\_,_ => ""} ;
-        } ;
-        ConsClass c cs = {
-            as = mkListAP c.a cs.as ;
-            ns = mkListCN c.n cs.ns ;
-        } ; 
         LandClass = mkClass "land" ;
         CreatureClass = mkClass "creature" ;
         ArtifactClass = mkClass "artifact" ;
         EnchantmentClass = mkClass "enchantment" ;
         IstantClass = mkClass "instant" ;
         SorceryClass = mkClass "sorcery" ;
+        -- I think this is genius, why doesn't it work!?
+     -- ClassClass c1 c2 = mkClass ((mkCN c1.a c2.n).s ! Sg ! Nom) ;
 
-        BaseSubclass = lin ListCN {s1 = \\_,_ => ""; s2 = \\_,_ => ""} ;
-        ConsSubclass = mkListCN ;
         -- basic lands (more subypes to come) 
-        PlainSubclass = mkCN (mkN "plain") ; -- should be "plainS" but that's dumb
+        PlainSubclass = mkCN (mkN "plain") ; -- actually "plainS" but I refuse
         IslandSubclass = mkCN (mkN "island") ;
         SwampSubclass = mkCN (mkN "swamp") ;
         MountainSubclass = mkCN (mkN "mountain") ;
@@ -122,7 +121,8 @@ concrete MTGEng of MTG = open
         IntimidateKeyword = mkNP (mkPN "intimidate") ;
         LifelinkKeyword = mkNP (mkPN "lifelink") ;
         MenaceKeyword = mkNP (mkPN "menace") ;
-     -- ProtectionFromKeyword color = mkNP (mkPN ("protection from" ++ color.n.s ! Sg ! Nom)) ;
+     -- ProtectionFromKeyword color = 
+         -- mkNP (mkPN ("protection from" ++ color.n.s ! Sg ! Nom)) ;
         ProwessKeyword = mkNP (mkPN "prowess") ;
         ReachKeyword = mkNP (mkPN "reach") ;
         ShroudKeyword = mkNP (mkPN "shroud") ;
@@ -146,7 +146,8 @@ concrete MTGEng of MTG = open
                 (mkNP (DetQuant IndefArt NumSg) color_N)
                 (mkNP it_Pron)))) ;
         YouTarget = youSg_Pron ;
-        ClassClassesTarget c1 c2 = mkNP (DetQuant IndefArt NumPl) (mkCN c1.a c2.n) ;
+        ClassClassesTarget c1 c2 = 
+            mkNP (DetQuant IndefArt NumPl) (mkCN c1.a c2.n) ;
         
         AttackAction = mkVP attack_V ;
         BlockAction = mkVP block_V ;
@@ -166,8 +167,13 @@ concrete MTGEng of MTG = open
         };
 
         -- should be applicable to other languages too
-        mkColor : Str -> Color = \s -> lin Color {a = mkA s ; n = mkN s} ;
-        mkClass : Str -> Class = \s -> lin Class {a = (mkAP (mkA s)) ; n = (mkCN (mkN s))} ;
+        mkColor : Str -> Color = \s -> lin Color {
+            a = mkA s ; 
+            n = mkCN (mkN s) } ;
+        
+        mkClass : Str -> Class = \s -> lin Class {
+            a = mkA s ; 
+            n = (mkCN (mkN s)) } ;
         
         attack_V = mkV "attack" ;
         attach_V = mkV "attach" ;
