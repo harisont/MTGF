@@ -132,9 +132,9 @@ concrete MTGEng of MTG = open
         TargetCanActionStatement trg pol act = mkS pol (mkCl trg can_VV act) ;
  
         ThisClassTarget c = mkNP this_Quant c.n ;
-        CreaturesWithKeyword k = mkNP 
+        CreaturesWithKeywordTarget k = mkNP 
             (DetQuant IndefArt NumPl) 
-            (mkCN (mkN2 CreatureClass.n "with") (mkNP k)) ;
+            (mkCN (mkN2 CreatureClass.n "with") k) ;
         CreaturesWithKeywordsTarget ks = mkNP 
             (DetQuant IndefArt NumPl)
             (mkCN (mkN2 CreatureClass.n "with") (mkNP andOr_Conj ks)) ;
