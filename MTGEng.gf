@@ -34,7 +34,8 @@ concrete MTGEng of MTG = open
         Toughness = Decimal ;
 
         ActivationCost = Str ;
-        Keyword = PN ;
+        Keyword = NP ;
+        ListKeyword = ListNP ;
         Explanation = Text ;
 
         Tap = Bool ;
@@ -69,7 +70,10 @@ concrete MTGEng of MTG = open
         RedColor = mkColor "red" ;
         GreenColor = mkColor "green" ;
 
-        BaseSuperclass = lin ListAP {s1 = \\_ => ""; s2 = \\_ => ""; isPre = False} ;
+        BaseSuperclass = lin ListAP {
+            s1 = \\_ => ""; 
+            s2 = \\_ => ""; 
+            isPre = False} ;
         ConsSuperclass = mkListAP ;
         BasicSuperclass = mkAP (mkA "basic") ;
         LegendarySuperclass = mkAP (mkA "legendary") ;
@@ -100,41 +104,43 @@ concrete MTGEng of MTG = open
 
         BasicAbility e = e ;
 
+        BaseKeyword k1 k2 = lin ListNP {
+            s1 = k1.s ;
+            s2 = k2.s ;
+            a = AgP1 Sg } ;
+        ConsKeyword ks = mkListNP ks ;
         -- so-called "evergreen" keywords (more to come)
         -- from en.wikipedia.org/wiki/List_of_Magic:_The_Gathering_keywords
-        DeathtouchKeyword = mkPN "deathtouch" ;
-        DefenderKeyword = mkPN "defender" ;
-        DoubleStrikeKeyword = mkPN "double strike" ; 
-     -- EnchantKeyword type = mkPN ("enchant" ++ type.s ! Sg ! Nom);
-     -- EquipKeyword cost = mkPN ("equip" ++ cost) ;
-        FirstStrikeKeyword = mkPN "first strike" ;
-        FlashKeyword = mkPN "flash" ;
-        FlyingKeyword = mkPN "flying" ;
-        HasteKeyword = mkPN "haste" ;
-        HexproofKeyword = mkPN "hexproof" ;
-        IndestructibleKeyword = mkPN "indestructible" ;
-        IntimidateKeyword = mkPN "intimidate" ;
-        LifelinkKeyword = mkPN "lifelink" ;
-        MenaceKeyword = mkPN "menace" ;
-     -- ProtectionFromKeyword color = mkPN ("protection from" ++ color.n.s ! Sg ! Nom) ;
-        ProwessKeyword = mkPN "prowess" ;
-        ReachKeyword = mkPN "reach" ;
-        ShroudKeyword = mkPN "shroud" ;
-        TrampleKeyword = mkPN "trample" ;
-        VigilanceKeyword = mkPN "vigilance" ;
+        DeathtouchKeyword = mkNP (mkPN "deathtouch") ;
+        DefenderKeyword = mkNP (mkPN "defender") ;
+        DoubleStrikeKeyword = mkNP (mkPN "double strike") ; 
+     -- EnchantKeyword type = mkNP (mkPN ("enchant" ++ type.s ! Sg ! Nom));
+     -- EquipKeyword cost = mkNP (mkPN ("equip" ++ cost)) ;
+        FirstStrikeKeyword = mkNP (mkPN "first strike") ;
+        FlashKeyword = mkNP (mkPN "flash") ;
+        FlyingKeyword = mkNP (mkPN "flying") ;
+        HasteKeyword = mkNP (mkPN "haste") ;
+        HexproofKeyword = mkNP (mkPN "hexproof") ;
+        IndestructibleKeyword = mkNP (mkPN "indestructible") ;
+        IntimidateKeyword = mkNP (mkPN "intimidate") ;
+        LifelinkKeyword = mkNP (mkPN "lifelink") ;
+        MenaceKeyword = mkNP (mkPN "menace") ;
+     -- ProtectionFromKeyword color = mkNP (mkPN ("protection from" ++ color.n.s ! Sg ! Nom)) ;
+        ProwessKeyword = mkNP (mkPN "prowess") ;
+        ReachKeyword = mkNP (mkPN "reach") ;
+        ShroudKeyword = mkNP (mkPN "shroud") ;
+        TrampleKeyword = mkNP (mkPN "trample") ;
+        VigilanceKeyword = mkNP (mkPN "vigilance") ;
 
         TargetCanActionStatement trg pol act = mkS pol (mkCl trg can_VV act) ;
  
         ThisClassTarget c = mkNP this_Quant c.n ;
-        -- to be replaced with a single CreaturesWithKeywords
-        --creaturesWithKeyword k = mkNP 
-        --    (DetQuant IndefArt NumPl) 
-        --    (mkCN (mkN2 CreatureClass.n "with") (mkNP k));
-        --creaturesWithKeyword1AndOrKeyword2 k1 k2 = mkNP 
-        --    (DetQuant IndefArt NumPl) 
-        --    (mkCN 
-        --        (mkN2 CreatureClass.n "with") 
-        --        (mkNP andOr_Conj (mkNP k1) (mkNP k2)));
+        CreaturesWithKeyword k = mkNP 
+            (DetQuant IndefArt NumPl) 
+            (mkCN (mkN2 CreatureClass.n "with") (mkNP k)) ;
+        CreaturesWithKeywordsTarget ks = mkNP 
+            (DetQuant IndefArt NumPl)
+            (mkCN (mkN2 CreatureClass.n "with") (mkNP andOr_Conj ks)) ;
         CreaturesThatShareAColorWithIt = mkNP 
             (DetQuant IndefArt NumPl) 
             (mkCN CreatureClass.n (mkRS (mkRCl 
@@ -157,11 +163,11 @@ concrete MTGEng of MTG = open
         NegativePolarity = PNeg ;
 
     oper
-
         mkListCN : CN -> [CN] -> [CN] = \n,ns -> lin ListCN {
             s1 = n.s ;
             s2 = \\num,cas => ns.s1 ! num ! cas ++ ns.s2 ! num ! cas ; 
         };
+
         -- should be applicable to other languages too
         mkColor : Str -> Color = \s -> lin Color {a = mkA s ; n = mkN s} ;
         mkClass : Str -> Class = \s -> lin Class {a = (mkAP (mkA s)) ; n = (mkCN (mkN s))} ;

@@ -30,7 +30,7 @@ abstract MTG = open Numeral, Common in {
         [Subclass]{0} ;
         
         -- text boxs may contain a list of abilities and a flavor text
-        Ability ;            -- e.g. "Flying" (but possibly also longer text)
+        Ability ;           -- e.g. "Flying" (but possibly also longer text)
         [Ability]{0} ;
         Flavor ;            -- flavor text (unconstrained language)
 
@@ -42,7 +42,7 @@ abstract MTG = open Numeral, Common in {
         -- and/or explanation
         ActivationCost ;    -- cost for activating an effect
         Keyword ;           -- e.g. "Flying"
-        [Keyword]{1} ;
+        [Keyword]{2} ;
         Explanation ;       -- ability text (reminder text or other)
 
         -- activation costs may or may not include a "self-tap" symbol
@@ -148,6 +148,7 @@ abstract MTG = open Numeral, Common in {
 
         ThisClassTarget : Class -> Target ; -- "this creature"
         -- could be "class with" but I think this is only used for creatures
+        CreaturesWithKeywordTarget : Keyword -> Target ;
         CreaturesWithKeywordsTarget : [Keyword] -> Target ;
         CreaturesThatShareAColorWithIt : Target ;
         YouTarget : Target ;
