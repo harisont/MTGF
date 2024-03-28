@@ -52,9 +52,6 @@ concrete MTGEng of MTG = open
         Polarity = Pol ;
     
     lin
-        Land subt = 
-            let tl : TypeLine = CardTypeLine BasicSuperclass LandClass subt
-            in subt.s ! Sg ! Nom ++ "\n" ++ tl.s ;
 
         CardTypeLine supts ts subts = {
             s = supts.s1 ! (AgP1 Sg) ++ supts.s2 ! (AgP1 Sg) ++

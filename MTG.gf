@@ -66,8 +66,8 @@ abstract MTG = open Numeral, Common in {
         Polarity ;
 
     fun 
-        BasicLandCard : Subclass -> Card -> Flavor -> Card ;
-        LandCard : Subclass -> Card -> TypeLine -> TextBox -> Card ; 
+        BasicLandCard : Subclass -> Flavor -> Card ;
+        LandCard : Subclass -> TypeLine -> TextBox -> Card ; 
         SpellCard : Name -> [Color] -> ManaCost -> TypeLine -> TextBox -> Card ;
         CreatureCard : Name -> [Color] -> ManaCost -> TypeLine -> Text -> Stats -> Card ;
 

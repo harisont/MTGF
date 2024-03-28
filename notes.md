@@ -28,3 +28,4 @@
 - [ ] reducing `creaturesWithKeyword` and `creaturesWithKeyword1AndOrKeyword2` to `creaturesWithKeywords`, using lists (I don't know how to map `mkNP` on a list of `Keyword`s)
 - [ ] number agreement with "it" (e.g. "artifact __lands__ can't only be blocked by creatures that share a color with __it__*")
 - [ ] "you" in reflexives (e.g. "you can only be blocked by __you__")
+- [ ] the base case for __all__ RGL-based lists should be 2, not 1 or 0 (otherwise you end up with "incomplete" lists such as "legendary , basic ,")
