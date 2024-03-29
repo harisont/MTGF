@@ -1,4 +1,4 @@
-abstract MTG = open Numeral, Common in {
+abstract MTG = open Numeral, Common, Cat in {
     flags startcat = Card ;
 
     cat
@@ -61,6 +61,8 @@ abstract MTG = open Numeral, Common in {
         Target ;            -- "target land", "this creature" or "Negate"
 
         Polarity ;
+
+        Sub ;       -- "whenever"
 
     fun 
         BasicLandCard : Subclass -> Flavor -> Card ;
@@ -173,9 +175,13 @@ abstract MTG = open Numeral, Common in {
         CreaturesWithKeywordsTarget : [Keyword] -> Target ;
         CreaturesThatShareAColorWithIt : Target ;
         YouTarget : Target ;
+        ItTarget : Target ;
         -- "artifact creatures"
         ClassClassesTarget : Class -> Class -> Target ;
 
+        -- "as soon as it comes under your control"
+        SubTargetActionTrigger : Sub -> Target -> Action -> Trigger ;
+        
         AttackAction : Action ;
         BlockAction : Action ;
         BlockTargetAction : Target -> Action ;
@@ -183,7 +189,10 @@ abstract MTG = open Numeral, Common in {
         OnlyBeBlockedByTargetAction : Target -> Action ;
         OnlyBeBlockedByTarget1AndOrTarget2Action : 
             Target -> Target -> Action ;
+        ComeUnderYourControlAction : Action ;
 
         PositivePolarity : Polarity ;
         NegativePolarity : Polarity ;
+
+        AsSoonAsSub : Sub ;
 }

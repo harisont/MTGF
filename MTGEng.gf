@@ -1,13 +1,10 @@
 concrete MTGEng of MTG = open 
     Prelude, 
     ResEng,
-    StructuralEng,
     LangEng, 
     ConstructorsEng,
     ParadigmsEng,
-    ExtraEng,
-    ParamX,
-    CatEng in {
+    ExtraEng in {
     lincat
         Card = Str ;
 
@@ -40,13 +37,15 @@ concrete MTGEng of MTG = open
         Statement = S ;
         Command = Imp ;
 
-        Trigger = Cl ;
+        Trigger = Adv ;
         Action = VP ;
         Condition = Cl ;
 
         Target = NP ;
 
         Polarity = Pol ;
+
+        Sub = Subj ;
     
     lin
         ClassTypeLine c = c.n.s ! Sg ! Nom ;
@@ -110,7 +109,7 @@ concrete MTGEng of MTG = open
         DeathtouchKeyword = mkNP (mkPN "deathtouch") ;
         DefenderKeyword = mkNP (mkPN "defender") ;
         DoubleStrikeKeyword = mkNP (mkPN "double strike") ; 
-     -- EnchantKeyword type = mkNP (mkPN ("enchant" ++ type.s ! Sg ! Nom));
+     -- EnchantKeyword type = mkNP (mkPN ("enchant" ++ type.n.s ! Sg ! Nom));
      -- EquipKeyword cost = mkNP (mkPN ("equip" ++ cost)) ;
         FirstStrikeKeyword = mkNP (mkPN "first strike") ;
         FlashKeyword = mkNP (mkPN "flash") ;
@@ -146,9 +145,13 @@ concrete MTGEng of MTG = open
                 (mkNP (DetQuant IndefArt NumSg) color_N)
                 (mkNP it_Pron)))) ;
         YouTarget = youSg_Pron ;
+        ItTarget = it_Pron ;
         ClassClassesTarget c1 c2 = 
             mkNP (DetQuant IndefArt NumPl) (mkCN c1.a c2.n) ;
         
+        -- ...no idea why mkAdv does not work (instead of SubjS)
+        SubTargetActionTrigger sub trg act = SubjS sub (mkS (mkCl trg act)) ;
+
         AttackAction = mkVP attack_V ;
         BlockAction = mkVP block_V ;
         BlockTargetAction t = mkVP block_V2 t ;
@@ -159,6 +162,8 @@ concrete MTGEng of MTG = open
 
         PositivePolarity = PPos ;
         NegativePolarity = PNeg ;
+
+        AsSoonAsSub = mkSubj "as soon as" ;
 
     oper
         mkListCN : CN -> [CN] -> [CN] = \n,ns -> lin ListCN {
@@ -179,6 +184,7 @@ concrete MTGEng of MTG = open
         attach_V = mkV "attach" ;
         block_V = mkV "block" ;
         share_V = mkV "share" ;
+        tap_V = mkV "TAP" ;
 
         block_V2 = mkV2 block_V ;
         share_V3 = mkV3 share_V with_Prep ;
