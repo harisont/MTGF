@@ -160,7 +160,9 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         OnlyBeBlockedByTargetAction t = mkVP only_Adv (passiveVP block_V2 t) ;
         OnlyBeBlockedByTarget1AndOrTarget2Action t1 t2 = 
             mkVP only_Adv (passiveVP block_V2 (mkNP andOr_Conj t1 t2)) ;
-
+        -- ...no idea why mkAdv does not work (instead of PrepNP)
+        ComeUnderYourControlAction = 
+          mkVP come_V (mkAdv under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
         AsSoonAsSub = Paradigms.mkSubj "as soon as" ;
 
     oper
@@ -183,12 +185,13 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         block_V = Paradigms.mkV "block" ;
         share_V = Paradigms.mkV "share" ;
         tap_V = Paradigms.mkV "TAP" ;
+	come_V = Paradigms.mkV "come" ;
 
         block_V2 = Paradigms.mkV2 block_V ;
         share_V3 = Paradigms.mkV3 share_V with_Prep ;
 
         color_N = Paradigms.mkN "color" ;
-
+        control_N = Paradigms.mkN "control" ;
         only_Adv = Paradigms.mkAdV "only" ;
 
 --        this_Quant = mkQuant "this" "these" ;
