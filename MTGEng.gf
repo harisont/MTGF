@@ -129,7 +129,9 @@ concrete MTGEng of MTG = open
         VigilanceKeyword = mkNP (mkPN "vigilance") ;
 
         TargetCanActionStatement trg pol act = mkS pol (mkCl trg can_VV act) ;
- 
+        TargetCanActionTriggerStatement trg act tri = 
+            mkS (mkS (mkCl trg can_VV act)) tri ;
+
         ThisClassTarget c = mkNP this_Quant c.n ;
         CreaturesWithKeywordTarget k = mkNP 
             (DetQuant IndefArt NumPl) 
@@ -159,6 +161,9 @@ concrete MTGEng of MTG = open
         OnlyBeBlockedByTargetAction t = mkVP only_Adv (passiveVP block_V2 t) ;
         OnlyBeBlockedByTarget1AndOrTarget2Action t1 t2 = 
             mkVP only_Adv (passiveVP block_V2 (mkNP andOr_Conj t1 t2)) ;
+        -- ...no idea why mkAdv does not work (instead of PrepNP)
+        ComeUnderYourControlAction = 
+            mkVP come_V (PrepNP under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
 
         PositivePolarity = PPos ;
         NegativePolarity = PNeg ;
@@ -185,11 +190,13 @@ concrete MTGEng of MTG = open
         block_V = mkV "block" ;
         share_V = mkV "share" ;
         tap_V = mkV "TAP" ;
+        come_V = mkV "come" ;
 
         block_V2 = mkV2 block_V ;
         share_V3 = mkV3 share_V with_Prep ;
 
         color_N = mkN "color" ;
+        control_N = mkN "control" ;
 
         only_Adv = mkAdV "only" ;
 

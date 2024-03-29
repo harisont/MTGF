@@ -168,6 +168,9 @@ abstract MTG = open Numeral, Common, Cat in {
         
         -- "this creature can('t) block creatures with flying"
         TargetCanActionStatement : Target -> Polarity -> Action -> Statement ;
+        -- "this creature can attack as soon as it comes under your control"
+        TargetCanActionTriggerStatement : 
+            Target -> Action -> Trigger -> Statement ;
 
         ThisClassTarget : Class -> Target ; -- "this creature"
         -- could be "class with" but I think this is only used for creatures
