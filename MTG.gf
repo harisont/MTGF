@@ -60,10 +60,6 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
         -- tragets are used in triggers, actions and conditions
         Target ;            -- "target land", "this creature" or "Negate"
 
---        Polarity ;
-
---        Sub ;       -- "whenever"
-
     fun 
         BasicLandCard : Subclass -> Flavor -> Card ;
         LandCard : Subclass -> TypeLine -> TextBox -> Card ; 
@@ -192,9 +188,6 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
         OnlyBeBlockedByTarget1AndOrTarget2Action : 
             Target -> Target -> Action ;
         ComeUnderYourControlAction : Action ;
-
---        PositivePolarity : Polarity ;
---        NegativePolarity : Polarity ;
 
         AsSoonAsSub : Subj ;
 }
