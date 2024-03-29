@@ -162,7 +162,8 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
             mkVP only_Adv (passiveVP block_V2 (mkNP andOr_Conj t1 t2)) ;
         -- ...no idea why mkAdv does not work (instead of PrepNP)
         ComeUnderYourControlAction = 
-          mkVP come_V (mkAdv under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
+          mkVP (mkVP come_V) (mkAdv under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
+	
         AsSoonAsSub = Paradigms.mkSubj "as soon as" ;
 
     oper
