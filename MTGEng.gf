@@ -44,7 +44,6 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         Condition = Cl ;
 
         Target = NP ;
---	ListCN = Conjunction.ListCN;
 
     lin
         ClassTypeLine c = c.n.s ! Sg ! Res.Nom ;
@@ -164,6 +163,21 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
 	
         AsSoonAsSub = Par.mkSubj "as soon as" ;
 
+    oper
+        mkListCN : CN -> [CN] -> [CN] = \n,ns -> lin ListCN {
+            s1 = n.s ;
+            s2 = \\num,cas => ns.s1 ! num ! cas ++ ns.s2 ! num ! cas ; 
+        };
+
+        -- should be applicable to other languages too
+        mkColor : Str -> Color = \s -> lin Color {
+            a = Par.mkA s ; 
+            n = mkCN (Par.mkN s) } ;
+        
+        mkClass : Str -> Class = \s -> lin Class {
+            a = Par.mkA s ; 
+            n = (mkCN (Par.mkN s)) } ;
+
         attack_V = Par.mkV "attack" ;
         attach_V = Par.mkV "attach" ;
         block_V = Par.mkV "block" ;
@@ -179,19 +193,4 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         only_Adv = Par.mkAdV "only" ;
 
         andOr_Conj = Par.mkConj "and/or" ;
-
-    oper
-        mkListCN : CN -> [CN] -> [CN] = \n,ns -> lin ListCN {
-            s1 = n.s ;
-            s2 = \\num,cas => ns.s1 ! num ! cas ++ ns.s2 ! num ! cas ; 
-        };
-
-        -- should be applicable to other languages too
-        mkColor : Str -> Color = \s -> lin Color {
-            a = Par.mkA s ; 
-            n = mkCN (Par.mkN s) } ;
-        
-        mkClass : Str -> Class = \s -> lin Class {
-            a = Par.mkA s ; 
-            n = (mkCN (Par.mkN s)) } ;
 }

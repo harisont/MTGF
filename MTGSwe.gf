@@ -57,7 +57,8 @@ concrete MTGSwe of MTG = ConjunctionSwe-[Card] ** open
         LegendarySuperclass = Par.mkA "legendarisk" ;
 
         LandClass = mkClass "land" "landet" "länder" "länderna" Par.neutrum ;
-        CreatureClass = mkClass "varelse" Par.utrum ;
+        CreatureClass = 
+            mkClass "varelse" "varelsen" "varelser" "varelsena" Par.utrum ;
         ArtifactClass = mkClass "artefakt" "artefakter" ;
         EnchantmentClass = mkClass "förhäxning" ;
         InstantClass = mkClass "instant" "instanter" ;
@@ -117,6 +118,29 @@ concrete MTGSwe of MTG = ConjunctionSwe-[Card] ** open
 	
         --AsSoonAsSub = Par.mkSubj "så snart som" ;
 
+    oper
+
+        -- should be applicable to other languages too
+        mkColor : Str -> Color = \s -> lin Color {
+            a = Par.mkA s ; 
+            n = mkCN (Par.mkN s) } ;
+        
+        mkClass = overload {
+            mkClass : Str -> Class = \s -> lin Class {
+                a = Par.mkA s s s s s s s ; 
+                n = (mkCN (Par.mkN s)) } ;
+            mkClass : Str -> Par.Gender -> Class = \s, g -> lin Class {
+                a = Par.mkA s s s s s s s ; 
+                n = (mkCN (Par.mkN s g)) } ;
+            mkClass : Str -> Str -> Class = \s, p -> lin Class {
+                a = Par.mkA s s s s s s s ; 
+                n = (mkCN (Par.mkN s p)) } ;
+            mkClass : Str -> Str -> Str -> Str -> Par.Gender -> Class = 
+                \o1, b1, o2, b2, g -> lin Class {
+                    a = Par.mkA o1 o1 o1 o1 o1 o1 o1 ; 
+                    n = (mkCN (Par.mkN o1 b1 o2 b2 g)) } ;
+        } ;
+        
         attack_V = Par.mkV "attackera" ;
         attach_V = Par.mkV "fästa" ;
         block_V = Par.mkV "blockera" ;
@@ -133,27 +157,4 @@ concrete MTGSwe of MTG = ConjunctionSwe-[Card] ** open
         only_Adv = Par.mkAdV "endast" ;
 
         --andOr_Conj = Par.mkConj "och/eller" ;
-
-    oper
-
-        -- should be applicable to other languages too
-        mkColor : Str -> Color = \s -> lin Color {
-            a = Par.mkA s ; 
-            n = mkCN (Par.mkN s) } ;
-        
-        mkClass = overload {
-            mkClass : Str -> Class = \s -> lin Class {
-                a = Par.mkA s ; 
-                n = (mkCN (Par.mkN s)) } ;
-            mkClass : Str -> Par.Gender -> Class = \s, g -> lin Class {
-                a = Par.mkA s ; 
-                n = (mkCN (Par.mkN s g)) } ;
-            mkClass : Str -> Str -> Class = \s, p -> lin Class {
-                a = Par.mkA s ; 
-                n = (mkCN (Par.mkN s p)) } ;
-            mkClass : Str -> Str -> Str -> Str -> Par.Gender -> Class = 
-                \o1, b1, o2, b2, g -> lin Class {
-                    a = Par.mkA o1 ; 
-                    n = (mkCN (Par.mkN o1 b1 o2 b2 g)) } ;
-        } ;
 }
