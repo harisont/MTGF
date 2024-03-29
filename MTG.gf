@@ -114,7 +114,7 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
         CreatureClass : Class ;
         ArtifactClass : Class ;
         EnchantmentClass : Class ;
-        IstantClass : Class ;
+        InstantClass : Class ;
         SorceryClass : Class ;
      -- PlaneswalkerClass : Class ;
      -- BattleClass : Class ;
@@ -190,4 +190,22 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
         ComeUnderYourControlAction : Action ;
 
         AsSoonAsSub : Subj ;
+
+        -- basic lexicon
+        attack_V : V ;
+        attach_V : V ;
+        block_V : V ;
+        share_V : V ;
+        tap_V : V ;
+        come_V : V ;
+
+        block_V2 : V2 ;
+        share_V3 : V3 ;
+        
+        color_N : N ;
+        control_N : N ;
+
+        only_Adv : Adv ;
+
+        andOr_Conj : Conj ;
 }
