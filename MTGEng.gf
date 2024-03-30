@@ -1,13 +1,11 @@
 concrete MTGEng of MTG = ConjunctionEng-[Card] ** open 
-    Prelude,
-    ParamX,
-    (Res=ResEng),
-    (Conj=ConjunctionEng),
-    (Par=ParadigmsEng),
-    (Adv=AdverbEng),
-    SyntaxEng,
-    ExtraEng
-    in {
+    Prelude, 
+    ResEng,
+    LangEng, 
+    ConjunctionEng,
+    ConstructorsEng,
+    ParadigmsEng,
+    ExtraEng in {
     lincat
         Card = Str ;
 
@@ -32,7 +30,7 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
 
         ActivationCost = Str ;
         Keyword = NP ;
-        ListKeyword = Conj.ListNP ;
+        ListKeyword = ListNP ;
         Explanation = Text ;
 
         Tap = Bool ;
@@ -46,32 +44,35 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
 
         Target = NP ;
 
+        Polarity = Pol ;
+
+        Sub = Subj ;
+    
     lin
-        ClassTypeLine c = c.n.s ! Sg ! Res.Nom ;
+        ClassTypeLine c = c.n.s ! Sg ! Nom ;
         SuperTypeLine supc c = 
-            supc.s ! (Res.AAdj Posit Res.Nom) ++ c.n.s ! Sg ! Res.Nom ;
+            supc.s ! (AAdj Posit Nom) ++ c.n.s ! Sg ! Nom ;
         ClassSubTypeLine c subc = 
-            c.n.s ! Sg ! Res.Nom ++ "-" ++ subc.s ! Sg ! Res.Nom ;
-        SuperClassSubTypeLine supc c subc = supc.s ! (Res.AAdj Posit Res.Nom) 
-                                         ++ c.n.s ! Sg ! Res.Nom ++ "-"  
-                                         ++ subc.s ! Sg ! Res.Nom ;
-        ClassSubsTypeLine c subc1 subc2 = c.n.s ! Sg ! Res.Nom ++ "-" 
-                                       ++ subc1.s ! Sg ! Res.Nom 
-                                       ++ subc2.s ! Sg ! Res.Nom ; 
-        ClassesSubsTypeLine c1 c2 subc = c1.n.s ! Sg ! Res.Nom
-                                      ++ c2.n.s ! Sg ! Res.Nom ++ "-" 
-                                      ++ subc.s ! Sg ! Res.Nom ;
-        SupersClassSubsTypeLine supc c subc1 subc2 = 
-            supc.s ! (Res.AAdj Posit Res.Nom)
-            ++ c.n.s ! Sg ! Res.Nom
-            ++ "-" ++ subc1.s ! Sg ! Res.Nom
-            ++ subc2.s ! Sg ! Res.Nom ;
+            c.n.s ! Sg ! Nom ++ "-" ++ subc.s ! Sg ! Nom ;
+        SuperClassSubTypeLine supc c subc = supc.s ! (AAdj Posit Nom) 
+                                         ++ c.n.s ! Sg ! Nom ++ "-"  
+                                         ++ subc.s ! Sg ! Nom ;
+        ClassSubsTypeLine c subc1 subc2 = c.n.s ! Sg ! Nom ++ "-" 
+                                       ++ subc1.s ! Sg ! Nom 
+                                       ++ subc2.s ! Sg ! Nom ; 
+        ClassesSubsTypeLine c1 c2 subc = c1.n.s ! Sg ! Nom
+                                      ++ c2.n.s ! Sg ! Nom ++ "-" 
+                                      ++ subc.s ! Sg ! Nom ;
+        SupersClassSubsTypeLine supc c subc1 subc2 = supc.s ! (AAdj Posit Nom)
+                                                  ++ c.n.s ! Sg ! Nom
+                                                  ++ "-" ++ subc1.s ! Sg ! Nom
+                                                  ++ subc2.s ! Sg ! Nom ;
         SupersClassesSubsTypeLine supc c1 c2 subc1 subc2 =                     
-            supc.s ! (Res.AAdj Posit Res.Nom)
-         ++ c1.n.s ! Sg ! Res.Nom        
-         ++ c2.n.s ! Sg ! Res.Nom        
-         ++ "-" ++ subc1.s ! Sg ! Res.Nom   
-         ++ subc2.s ! Sg ! Res.Nom ;     
+            supc.s ! (AAdj Posit Nom)
+         ++ c1.n.s ! Sg ! Nom        
+         ++ c2.n.s ! Sg ! Nom        
+         ++ "-" ++ subc1.s ! Sg ! Nom   
+         ++ subc2.s ! Sg ! Nom ;     
              
         WhiteColor = mkColor "white" ;
         BlueColor = mkColor "blue" ;
@@ -79,8 +80,8 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         RedColor = mkColor "red" ;
         GreenColor = mkColor "green" ;
 
-        BasicSuperclass = Par.mkA "basic" ;
-        LegendarySuperclass = Par.mkA "legendary" ;
+        BasicSuperclass = mkA "basic" ;
+        LegendarySuperclass = mkA "legendary" ;
 
         LandClass = mkClass "land" ;
         CreatureClass = mkClass "creature" ;
@@ -89,55 +90,57 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         InstantClass = mkClass "instant" ;
         SorceryClass = mkClass "sorcery" ;
         -- I think this is genius, why doesn't it work!?
-     -- ClassClass c1 c2 = mkClass ((mkCN c1.a c2.n).s ! Sg ! Res.Nom) ;
+     -- ClassClass c1 c2 = mkClass ((mkCN c1.a c2.n).s ! Sg ! Nom) ;
 
         -- basic lands (more subypes to come) 
-        PlainSubclass = mkCN (Par.mkN "plain") ; -- actually "plainS" but I refuse
-        IslandSubclass = mkCN (Par.mkN "island") ;
-        SwampSubclass = mkCN (Par.mkN "swamp") ;
-        MountainSubclass = mkCN (Par.mkN "mountain") ;
-        ForestSubclass = mkCN (Par.mkN "forest") ;     
+        PlainSubclass = mkCN (mkN "plain") ; -- actually "plainS" but I refuse
+        IslandSubclass = mkCN (mkN "island") ;
+        SwampSubclass = mkCN (mkN "swamp") ;
+        MountainSubclass = mkCN (mkN "mountain") ;
+        ForestSubclass = mkCN (mkN "forest") ;     
 
         BasicAbility e = e ;
 
         BaseKeyword k1 k2 = lin ListNP {
             s1 = k1.s ;
             s2 = k2.s ;
-            a = Res.AgP1 Sg } ;
+            a = AgP1 Sg } ;
         ConsKeyword ks = mkListNP ks ;
         -- so-called "evergreen" keywords (more to come)
         -- from en.wikipedia.org/wiki/List_of_Magic:_The_Gathering_keywords
-        DeathtouchKeyword = mkNP (Par.mkPN "deathtouch") ;
-        DefenderKeyword = mkNP (Par.mkPN "defender") ;
-        DoubleStrikeKeyword = mkNP (Par.mkPN "double strike") ; 
-     -- EnchantKeyword type = mkNP (Par.mkPN ("enchant" ++ type.n.s ! Sg ! Res.Nom));
-     -- EquipKeyword cost = mkNP (Par.mkPN ("equip" ++ cost)) ;
-        FirstStrikeKeyword = mkNP (Par.mkPN "first strike") ;
-        FlashKeyword = mkNP (Par.mkPN "flash") ;
-        FlyingKeyword = mkNP (Par.mkPN "flying") ;
-        HasteKeyword = mkNP (Par.mkPN "haste") ;
-        HexproofKeyword = mkNP (Par.mkPN "hexproof") ;
-        IndestructibleKeyword = mkNP (Par.mkPN "indestructible") ;
-        IntimidateKeyword = mkNP (Par.mkPN "intimidate") ;
-        LifelinkKeyword = mkNP (Par.mkPN "lifelink") ;
-        MenaceKeyword = mkNP (Par.mkPN "menace") ;
+        DeathtouchKeyword = mkNP (mkPN "deathtouch") ;
+        DefenderKeyword = mkNP (mkPN "defender") ;
+        DoubleStrikeKeyword = mkNP (mkPN "double strike") ; 
+     -- EnchantKeyword type = mkNP (mkPN ("enchant" ++ type.n.s ! Sg ! Nom));
+     -- EquipKeyword cost = mkNP (mkPN ("equip" ++ cost)) ;
+        FirstStrikeKeyword = mkNP (mkPN "first strike") ;
+        FlashKeyword = mkNP (mkPN "flash") ;
+        FlyingKeyword = mkNP (mkPN "flying") ;
+        HasteKeyword = mkNP (mkPN "haste") ;
+        HexproofKeyword = mkNP (mkPN "hexproof") ;
+        IndestructibleKeyword = mkNP (mkPN "indestructible") ;
+        IntimidateKeyword = mkNP (mkPN "intimidate") ;
+        LifelinkKeyword = mkNP (mkPN "lifelink") ;
+        MenaceKeyword = mkNP (mkPN "menace") ;
      -- ProtectionFromKeyword color = 
-         -- mkNP (mkPN ("protection from" ++ color.n.s ! Sg ! Res.Nom)) ;
-        ProwessKeyword = mkNP (Par.mkPN "prowess") ;
-        ReachKeyword = mkNP (Par.mkPN "reach") ;
-        ShroudKeyword = mkNP (Par.mkPN "shroud") ;
-        TrampleKeyword = mkNP (Par.mkPN "trample") ;
-        VigilanceKeyword = mkNP (Par.mkPN "vigilance") ;
+         -- mkNP (mkPN ("protection from" ++ color.n.s ! Sg ! Nom)) ;
+        ProwessKeyword = mkNP (mkPN "prowess") ;
+        ReachKeyword = mkNP (mkPN "reach") ;
+        ShroudKeyword = mkNP (mkPN "shroud") ;
+        TrampleKeyword = mkNP (mkPN "trample") ;
+        VigilanceKeyword = mkNP (mkPN "vigilance") ;
 
         TargetCanActionStatement trg pol act = mkS pol (mkCl trg can_VV act) ;
- 
+        TargetCanActionTriggerStatement trg act tri = 
+            mkS (mkS (mkCl trg can_VV act)) tri ;
+
         ThisClassTarget c = mkNP this_Quant c.n ;
-        CreaturesWithKeywordTarget k = mkNP 
+CreaturesWithKeywordTarget k = mkNP 
             aPl_Det 
-            (mkCN (Par.cnN2 CreatureClass.n with_Prep) k) ;
+            (mkCN (cnN2 CreatureClass.n with_Prep) k) ;
         CreaturesWithKeywordsTarget ks = mkNP 
             aPl_Det
-            (mkCN (Par.cnN2 CreatureClass.n with_Prep) (mkNP andOr_Conj ks)) ;
+            (mkCN (cnN2 CreatureClass.n with_Prep) (mkNP andOr_Conj ks)) ;
         CreaturesThatShareAColorWithIt = mkNP 
             aPl_Det 
             (mkCN CreatureClass.n (mkRS (mkRCl 
@@ -150,10 +153,8 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         ClassClassesTarget c1 c2 = 
             mkNP aPl_Det (mkCN c1.a c2.n) ;
         
-        -- apparently, mkAdv : Subj -> S is ambiguous so I have to use SubjS
-        -- from AdverbEng
-        SubTargetActionTrigger sub trg act = 
-            Adv.SubjS sub (mkS (mkCl trg act)) ;
+        -- ...no idea why mkAdv does not work (instead of SubjS)
+        SubTargetActionTrigger sub trg act = SubjS sub (mkS (mkCl trg act)) ;
 
         AttackAction = mkVP attack_V ;
         BlockAction = mkVP block_V ;
@@ -162,23 +163,28 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         OnlyBeBlockedByTargetAction t = mkVP only_AdV (passiveVP block_V2 t) ;
         OnlyBeBlockedByTarget1AndOrTarget2Action t1 t2 = 
             mkVP only_AdV (passiveVP block_V2 (mkNP andOr_Conj t1 t2)) ;
+        -- ...no idea why mkAdv does not work (instead of PrepNP)
         ComeUnderYourControlAction = 
-          mkVP (mkVP come_V) (mkAdv under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
+            mkVP come_V (PrepNP under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
+
+        PositivePolarity = PPos ;
+        NegativePolarity = PNeg ;
 
         -- basic vocab
-        attack_V = Par.mkV "attack" ;
-        attach_V = Par.mkV "attach" ;
-        block_V = Par.mkV "block" ;
-        share_V = Par.mkV "share" ;
-        tap_V = Par.mkV "TAP" ;
-	    come_V = Par.mkV "come" ;
-        block_V2 = Par.mkV2 block_V ; 
-        share_V3 = Par.mkV3 share_V with_Prep ;
-        color_N = Par.mkN "color" ;
-        control_N = Par.mkN "control" ;
-        only_AdV = Par.mkAdV "only" ;
-        andOr_Conj = Par.mkConj "and/or" ;
-        asSoonAs_Subj = Par.mkSubj "as soon as" ;
+        attack_V = mkV "attack" ;
+        attach_V = mkV "attach" ;
+        block_V = mkV "block" ;
+        share_V = mkV "share" ;
+        tap_V = mkV "TAP" ;
+	    come_V = mkV "come" ;
+        block_V2 = mkV2 block_V ; 
+        share_V3 = mkV3 share_V with_Prep ;
+        color_N = mkN "color" ;
+        control_N = mkN "control" ;
+        only_AdV = mkAdV "only" ;
+        andOr_Conj = mkConj "and/or" ;
+        asSoonAs_Subj = mkSubj "as soon as" ;
+        AsSoonAsSub = mkSubj "as soon as" ;
 
     oper
         mkListCN : CN -> [CN] -> [CN] = \n,ns -> lin ListCN {
@@ -188,10 +194,10 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
 
         -- should be applicable to other languages too
         mkColor : Str -> Color = \s -> lin Color {
-            a = Par.mkA s ; 
-            n = mkCN (Par.mkN s) } ;
+            a = mkA s ; 
+            n = mkCN (mkN s) } ;
         
         mkClass : Str -> Class = \s -> lin Class {
-            a = Par.mkA s ; 
-            n = (mkCN (Par.mkN s)) } ;
+            a = mkA s ; 
+            n = (mkCN (mkN s)) } ;
 }

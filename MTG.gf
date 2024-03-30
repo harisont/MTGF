@@ -1,4 +1,4 @@
-abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
+abstract MTG = Conjunction-[Card] ** open Numeral, Common, Cat in {
     flags startcat = Card ;
 
     cat
@@ -59,6 +59,10 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
 
         -- tragets are used in triggers, actions and conditions
         Target ;            -- "target land", "this creature" or "Negate"
+
+        Polarity ;
+
+        Sub ;       -- "whenever"
 
     fun 
         BasicLandCard : Subclass -> Flavor -> Card ;
@@ -163,9 +167,10 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
         AbilityExplanation : [Statement] -> [Command] -> Explanation ;
         
         -- "this creature can('t) block creatures with flying"
+        TargetCanActionStatement : Target -> Polarity -> Action -> Statement ;
+        -- "this creature can attack as soon as it comes under your control"
         TargetCanActionTriggerStatement : 
             Target -> Action -> Trigger -> Statement ;
-        TargetCanActionStatement : Target -> Pol -> Action -> Statement ;
 
         ThisClassTarget : Class -> Target ; -- "this creature"
         -- could be "class with" but I think this is only used for creatures
@@ -178,7 +183,7 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
         ClassClassesTarget : Class -> Class -> Target ;
 
         -- "as soon as it comes under your control"
-        SubTargetActionTrigger : Subj -> Target -> Action -> Trigger ;
+        SubTargetActionTrigger : Sub -> Target -> Action -> Trigger ;
         
         AttackAction : Action ;
         BlockAction : Action ;
@@ -188,6 +193,11 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
         OnlyBeBlockedByTarget1AndOrTarget2Action : 
             Target -> Target -> Action ;
         ComeUnderYourControlAction : Action ;
+
+        PositivePolarity : Polarity ;
+        NegativePolarity : Polarity ;
+
+        AsSoonAsSub : Sub ;
 
         -- basic vocab
         attack_V : V ;
