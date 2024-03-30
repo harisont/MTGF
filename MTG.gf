@@ -200,7 +200,7 @@ abstract MTG = Conjunction-[Card] ** open Numeral, Cat in {
         share_V3 : V3 ;
         color_N : N ;
         control_N : N  ;
-        only_Adv : Adv ;
+        only_AdV : AdV ;
         andOr_Conj : Conj ;
         asSoonAs_Subj : Subj ;
 }

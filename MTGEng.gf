@@ -4,6 +4,7 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
     (Res=ResEng),
     (Conj=ConjunctionEng),
     (Par=ParadigmsEng),
+    (Adv=AdverbEng),
     SyntaxEng,
     ExtraEng
     in {
@@ -149,15 +150,18 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         ClassClassesTarget c1 c2 = 
             mkNP aPl_Det (mkCN c1.a c2.n) ;
         
-        SubTargetActionTrigger sub trg act = mkAdv sub (mkS (mkCl trg act)) ;
+        -- apparently, mkAdv : Subj -> S is ambiguous so I have to use SubjS
+        -- from AdverbEng
+        SubTargetActionTrigger sub trg act = 
+            Adv.SubjS sub (mkS (mkCl trg act)) ;
 
         AttackAction = mkVP attack_V ;
         BlockAction = mkVP block_V ;
         BlockTargetAction t = mkVP block_V2 t ;
         BeBlockedAction = passiveVP block_V2 ;
-        OnlyBeBlockedByTargetAction t = mkVP only_Adv (passiveVP block_V2 t) ;
+        OnlyBeBlockedByTargetAction t = mkVP only_AdV (passiveVP block_V2 t) ;
         OnlyBeBlockedByTarget1AndOrTarget2Action t1 t2 = 
-            mkVP only_Adv (passiveVP block_V2 (mkNP andOr_Conj t1 t2)) ;
+            mkVP only_AdV (passiveVP block_V2 (mkNP andOr_Conj t1 t2)) ;
         ComeUnderYourControlAction = 
           mkVP (mkVP come_V) (mkAdv under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
 
@@ -172,7 +176,7 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         share_V3 = Par.mkV3 share_V with_Prep ;
         color_N = Par.mkN "color" ;
         control_N = Par.mkN "control" ;
-        only_Adv = Par.mkAdV "only" ;
+        only_AdV = Par.mkAdV "only" ;
         andOr_Conj = Par.mkConj "and/or" ;
         asSoonAs_Subj = Par.mkSubj "as soon as" ;
 
