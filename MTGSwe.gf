@@ -115,8 +115,21 @@ concrete MTGSwe of MTG = ConjunctionSwe-[Card] ** open
         OnlyBeBlockedByTargetAction t = mkVP only_Adv (passiveVP block_V2 t) ;
         ComeUnderYourControlAction = 
           mkVP (mkVP come_V) (mkAdv under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
-	
-        --AsSoonAsSub = Par.mkSubj "så snart som" ;
+        
+        -- basic vocab
+	    attack_V = Par.mkV "attackera" ;
+        attach_V = Par.mkV "fästa" ;
+        block_V = Par.mkV "blockera" ;
+        share_V = Par.mkV "dela" ;
+        tap_V = Par.mkV "TAPpa" ;
+	    come_V = Par.mkV "komma" "kom" "kommit" ;
+        block_V2 = Par.mkV2 block_V ;
+        share_V3 = Par.mkV3 share_V with_Prep ;
+        color_N = Par.mkN "färg" "färger" ;
+        control_N = Par.mkN "kontroll" "kontroller" ;
+        only_Adv = Par.mkAdV "endast" ;
+        --andOr_Conj = Par.mkConj "och/eller" ;
+        --asSoonAs_Subj = Par.mkSubj "så snart som" ;
 
     oper
 
@@ -140,21 +153,4 @@ concrete MTGSwe of MTG = ConjunctionSwe-[Card] ** open
                     a = Par.mkA o1 o1 o1 o1 o1 o1 o1 ; 
                     n = (mkCN (Par.mkN o1 b1 o2 b2 g)) } ;
         } ;
-        
-        attack_V = Par.mkV "attackera" ;
-        attach_V = Par.mkV "fästa" ;
-        block_V = Par.mkV "blockera" ;
-        share_V = Par.mkV "dela" ;
-        tap_V = Par.mkV "TAPpa" ;
-	    come_V = Par.mkV "komma" "kom" "kommit" ;
-
-        block_V2 = Par.mkV2 block_V ;
-        share_V3 = Par.mkV3 share_V with_Prep ;
-
-        color_N = Par.mkN "färg" "färger" ;
-        control_N = Par.mkN "kontroll" "kontroller" ;
-
-        only_Adv = Par.mkAdV "endast" ;
-
-        --andOr_Conj = Par.mkConj "och/eller" ;
 }

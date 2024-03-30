@@ -160,8 +160,21 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
             mkVP only_Adv (passiveVP block_V2 (mkNP andOr_Conj t1 t2)) ;
         ComeUnderYourControlAction = 
           mkVP (mkVP come_V) (mkAdv under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
-	
-        AsSoonAsSub = Par.mkSubj "as soon as" ;
+
+        -- basic vocab
+        attack_V = Par.mkV "attack" ;
+        attach_V = Par.mkV "attach" ;
+        block_V = Par.mkV "block" ;
+        share_V = Par.mkV "share" ;
+        tap_V = Par.mkV "TAP" ;
+	    come_V = Par.mkV "come" ;
+        block_V2 = Par.mkV2 block_V ;
+        share_V3 = Par.mkV3 share_V with_Prep ;
+        color_N = Par.mkN "color" ;
+        control_N = Par.mkN "control" ;
+        only_Adv = Par.mkAdV "only" ;
+        andOr_Conj = Par.mkConj "and/or" ;
+        asSoonAs_Subj = Par.mkSubj "as soon as" ;
 
     oper
         mkListCN : CN -> [CN] -> [CN] = \n,ns -> lin ListCN {
@@ -177,20 +190,4 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         mkClass : Str -> Class = \s -> lin Class {
             a = Par.mkA s ; 
             n = (mkCN (Par.mkN s)) } ;
-
-        attack_V = Par.mkV "attack" ;
-        attach_V = Par.mkV "attach" ;
-        block_V = Par.mkV "block" ;
-        share_V = Par.mkV "share" ;
-        tap_V = Par.mkV "TAP" ;
-	    come_V = Par.mkV "come" ;
-
-        block_V2 = Par.mkV2 block_V ;
-        share_V3 = Par.mkV3 share_V with_Prep ;
-
-        color_N = Par.mkN "color" ;
-        control_N = Par.mkN "control" ;
-        only_Adv = Par.mkAdV "only" ;
-
-        andOr_Conj = Par.mkConj "and/or" ;
 }
