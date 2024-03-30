@@ -44,10 +44,6 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
 
         Target = NP ;
 
-        Polarity = Pol ;
-
-        Sub = Subj ;
-    
     lin
         ClassTypeLine c = c.n.s ! Sg ! Nom ;
         SuperTypeLine supc c = 
@@ -167,9 +163,6 @@ CreaturesWithKeywordTarget k = mkNP
         ComeUnderYourControlAction = 
             mkVP come_V (PrepNP under_Prep (mkNP youSg_Pron (mkCN control_N))) ;
 
-        PositivePolarity = PPos ;
-        NegativePolarity = PNeg ;
-
         -- basic vocab
         attack_V = mkV "attack" ;
         attach_V = mkV "attach" ;
@@ -184,7 +177,6 @@ CreaturesWithKeywordTarget k = mkNP
         only_AdV = mkAdV "only" ;
         andOr_Conj = mkConj "and/or" ;
         asSoonAs_Subj = mkSubj "as soon as" ;
-        AsSoonAsSub = mkSubj "as soon as" ;
 
     oper
         mkListCN : CN -> [CN] -> [CN] = \n,ns -> lin ListCN {
