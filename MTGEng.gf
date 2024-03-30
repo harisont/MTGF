@@ -133,10 +133,10 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         ThisClassTarget c = mkNP this_Quant c.n ;
         CreaturesWithKeywordTarget k = mkNP 
             aPl_Det 
-            (mkCN (Par.mkN2 CreatureClass.n "with") k) ;
+            (mkCN (Par.cnN2 CreatureClass.n with_Prep) k) ;
         CreaturesWithKeywordsTarget ks = mkNP 
             aPl_Det
-            (mkCN (Par.mkN2 CreatureClass.n "with") (mkNP andOr_Conj ks)) ;
+            (mkCN (Par.cnN2 CreatureClass.n with_Prep) (mkNP andOr_Conj ks)) ;
         CreaturesThatShareAColorWithIt = mkNP 
             aPl_Det 
             (mkCN CreatureClass.n (mkRS (mkRCl 
@@ -168,7 +168,7 @@ concrete MTGEng of MTG = ConjunctionEng-[Card] ** open
         share_V = Par.mkV "share" ;
         tap_V = Par.mkV "TAP" ;
 	    come_V = Par.mkV "come" ;
-        block_V2 = Par.mkV2 block_V ;
+        block_V2 = Par.mkV2 block_V ; 
         share_V3 = Par.mkV3 share_V with_Prep ;
         color_N = Par.mkN "color" ;
         control_N = Par.mkN "control" ;

@@ -44,7 +44,6 @@ concrete MTGSwe of MTG = ConjunctionSwe-[Card] ** open
         Condition = Cl ;
 
         Target = NP ;
---	ListCN = Conjunction.ListCN;
 
     lin             
         WhiteColor = mkColor "vit" ;
